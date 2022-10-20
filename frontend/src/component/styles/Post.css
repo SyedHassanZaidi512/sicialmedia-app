@@ -1,0 +1,23 @@
+.post
+{   display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 25vw;
+    height: 100%;
+    margin: 10%;
+    margin-top:3%;
+
+
+}
+
+.create-post
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10%;
+    gap: 10px;
+
+}

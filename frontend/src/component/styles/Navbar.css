@@ -1,0 +1,30 @@
+/* 
+body
+{
+
+  background-color: #5856d6;
+
+} */
+
+.app-logo {
+
+  padding-right: 20vw;
+  padding-left: 10vw;
+ 
+}
+
+.icons{
+    display: flex;
+    flex-direction: row;
+    margin: 1vw;
+    gap:1vw;
+    align-items: center;
+    margin-right: 6vw;
+    
+}
+
+
+.navbar
+{
+    height:2vw;
+}
