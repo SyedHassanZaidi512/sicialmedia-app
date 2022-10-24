@@ -57,14 +57,7 @@ export default function SignIn() {
           setHelperText2("");
         }
       } else {
-        if (token) {
-          dispatch(logOut());
-          localStorage.removeItem("Token");
-          localStorage.removeItem("User");
-          localStorage.removeItem("checked");
-          localStorage.removeItem("userData");
-          console.log("previous token removed");
-        }
+   
         const res = await axios.post("http://localhost:5001/user/sign-in", {
           email,
           password,
@@ -83,6 +76,14 @@ export default function SignIn() {
           const notify = () => toast.error(res.data.message);
           notify();
         } else {
+          if (token) {
+            dispatch(logOut());
+            localStorage.removeItem("Token");
+            localStorage.removeItem("User");
+            localStorage.removeItem("checked");
+            localStorage.removeItem("userData");
+            console.log("previous token removed");
+          }
           localStorage.setItem("Token", res.data.token);
           localStorage.setItem("User", res.data.user.id);
           dispatch(userCredentials(res.data)); //this is sending token with user data

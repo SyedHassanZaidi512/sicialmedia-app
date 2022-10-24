@@ -93,9 +93,12 @@ function Allposts() {
     try {
       const res = await axios.post(
         `http://localhost:5001/comment/add/${postId}`,
-        { userId, text: newComment },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+        { userId, 
+          text: newComment 
+        },{
+          headers: { 
+            Authorization: `Bearer ${token}` 
+          },
         }
       );
       getUserData(); // get all users data

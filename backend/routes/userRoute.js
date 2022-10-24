@@ -3,11 +3,13 @@ const router = express.Router();
 const { User } = require("../models"); ///must do it dont forget
 const sequelize = require("sequelize");
 const jwt = require("jsonwebtoken");
+const { Op } = require("sequelize");
 const path = require("path");
 const auth = require("../middleware/auth");
 
 
 const cloudinary = require("cloudinary").v2;  //Cloudinary
+const { constants } = require("buffer");
 cloudinary.config({
   cloud_name: "dcvngfqi6",
   api_key: "626422852674784",
@@ -58,15 +60,23 @@ router.post("/sign-in", async (req, res) => {    // sign in
     });
   }
   if (!emailRefgex.test(email)) {
-    return res.json({ statusCode: 400, message: "invalid Email" });
+    return res.json({ 
+        statusCode: 400,
+        message: "invalid Email" 
+      });
   }
-
   try {
-    const emailExist = await User.findOne({ where: { email } });
-    const passwordExist = await User.findOne({ where: { password } });
-    if (!emailExist) {
-      return res.json({ statusCode: 401, message: "email does no mathed" });
-    } else if (!passwordExist) {
+    const userExist = await User.findOne({ 
+      where: {
+        [Op.or]:[{email},{password}]
+      }
+    });
+    if (!userExist) {
+      return res.json({ 
+        statusCode: 401,
+        message: "email does no mathed"
+      });
+    } else if (userExist.dataValues.password!==password) {
       return res.json({ statusCode: 402, message: "wrong Password" });
     } else {
       const userExist = await User.findOne({ where: { email, password } });
