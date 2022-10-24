@@ -11,6 +11,7 @@ const auth = require("../middleware/auth");
 
 const cloudinary = require("cloudinary").v2;  //Cloudinary
 const { constants } = require("buffer");
+const { connected } = require("process");
 cloudinary.config({
   cloud_name: "dcvngfqi6",
   api_key: "626422852674784",
@@ -112,7 +113,7 @@ router.get("/", auth, async (req, res) => {  //get User
     include: ["posts", "likes", "followers", "followings", "comments"],
     order: [["createdAt", "ASC"]],
   });
-
+  
   return res.json(AllUsers);
 });
 
@@ -149,16 +150,46 @@ router.put("/editPic/:id", auth, async (req, res) => {/////edit picture
 router.put("/editPassword/:id", auth, async (req, res) => {  //edit password
   const id = req.params.id; 
   const { newPassword } = req.body;
+  const { oldPassword } = req.body;
+  console.log(newPassword,oldPassword);
+  const userExist= await User.findOne({
+    where: { id }
+  });
   if (!newPassword) {
-    return res.json({ statusCode: 400, message: "Please add new-password" });
+    return res.json({ statusCode: 422, message: "Please add new-password" });
   } else {
     try {
-      
-      const user = await User.update(
-        { password: newPassword },
-        { where: { id } }
-      );
-      return res.status(201).json(user);
+      console.log("compare")
+      bcrypt.compare(oldPassword, userExist.password, function(err, result) {
+        if (result) 
+        { 
+          console.log("matched")
+          bcrypt.genSalt(10, (err, salt) => {
+            console.log("run")
+            bcrypt.hash(newPassword, salt, async function (err, hash) {
+              console.log("adding")
+              const user = await User.update(
+                { password: hash },
+                { where:  {id} }
+              );
+              console.log(user,"response");
+              if(user)
+              {
+                return res.json({ statusCode: 201, message: "password changed successfully" })
+              }
+          });
+          })
+    
+        } else {
+          return res.json({ 
+            statusCode: 422,
+            message: "password does not matched"
+          });
+       }
+     });
+    
+
+   
     } catch (error) {
       return res.status(500).json(error);
     }

@@ -40,8 +40,7 @@ function Allposts() {
     }
   }, [userData, posts, checked]);
 
-  const getPostData = async () => {
-    // to get all the posts getPosts
+  const getPostData = async () => { // to get all the posts getPosts
     try {
       const res = await axios.get("http://localhost:5001/post/all-post", {
         headers: {
@@ -55,8 +54,8 @@ function Allposts() {
       console.log("error", err);
     }
   };
-  const getUserData = async () => { //get one users data and all users
-    const user = localStorage.getItem("User");
+  const getUserData = async () => {
+    const user = localStorage.getItem("User");  // all users
     const client = axios.create({
       baseURL: "http://localhost:5001/user",
       headers: {
@@ -64,7 +63,7 @@ function Allposts() {
       },
     });
     try {
-      const res = await client.get(`getUser/${user}`);
+      const res = await client.get(`getUser/${user}`);//get one users data 
       setUserData(res.data);
       console.log(res.data, "current userData");
     } catch (err) {

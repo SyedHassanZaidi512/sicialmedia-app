@@ -24,6 +24,10 @@ function Settings({ userData, getData }) {
  
   const token = useSelector((state) => state.auth.token); //getting token from redux because
 
+  useEffect(() => {
+     getData()
+  }, [])
+ 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -31,26 +35,25 @@ function Settings({ userData, getData }) {
       const id = userData.id;
       if (newPassword === oldPassword) {
         return toast.error("new and old passoword should not be same");
-      } else if (userData.password !== oldPassword) {
-        return toast.error("wrong password");
       }
       setBoolError(true)
-      
-
-
       const res = await axios.put(
         `http://localhost:5001/user/editPassword/${id}`,
-        { newPassword },
+        { newPassword,oldPassword },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
+      if(res.data.statusCode===201)
+      {
+        return toast.success(res.data.message);
+      }
       if (res.data.statusCode === 422 || !res) {
         return toast.error(res.data.message);
       }
-      return toast.success("Password Changed successfully");
+      getData()    
     } catch (error) {
       console.log(error,"error")
     }
