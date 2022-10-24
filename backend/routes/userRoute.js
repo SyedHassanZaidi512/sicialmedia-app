@@ -4,6 +4,7 @@ const { User } = require("../models"); ///must do it dont forget
 const sequelize = require("sequelize");
 const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
+const bcrypt = require("bcrypt")
 const path = require("path");
 const auth = require("../middleware/auth");
 
@@ -21,7 +22,10 @@ router.post("/sign-up", async (req, res) => {  //Add user  /Sign Up
   const { name, email, password } = req.body;
   const emailRefgex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   if (!name || !email || !password) {
-    return res.json({ statusCode: 422, message: "Please Enter All Fields" });
+    return res.json({
+       statusCode: 422,
+       message: "Please Enter All Fields"
+       });
   }
   if (!emailRefgex.test(email)) {
     return res.json({ statusCode: 422, message: "invalid Email" });
@@ -34,14 +38,19 @@ router.post("/sign-up", async (req, res) => {  //Add user  /Sign Up
         message: "This Email Already Exists",
       });
     } else {
-      const file = req.files ? req.files.image : " ";
-      cloudinary.uploader.upload(file.tempFilePath, async (err, result) => {
-        picture = req.files ? result.url : " ";
-        const user = await User.create({ name, email, password, picture });
-        const token = jwt.sign({ id: user.id }, "ytrujm");
-        res.json({ token, user: user });
-        return res.status(201).json(user);
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, function(err, hash) {
+          const file = req.files ? req.files.image : " ";
+          cloudinary.uploader.upload(file.tempFilePath, async (err, result) => {
+            picture = req.files ? result.url : " ";
+            const user = await User.create({ name, email, password:hash, picture });
+            const token = jwt.sign({ id: user.id }, "ytrujm");
+            res.json({ token, user: user });
+            return res.status(201).json(user);
+          });
       });
+      })
+    
     }
   } catch (error) {
     return res.status(500).json(error);
@@ -49,8 +58,10 @@ router.post("/sign-up", async (req, res) => {  //Add user  /Sign Up
 });
 
 
-router.post("/sign-in", async (req, res) => {    // sign in
 
+
+router.post("/sign-in", async (req, res) => {    // sign in
+  
   const { email, password } = req.body;
   const emailRefgex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   if (!email || !password) {
@@ -67,29 +78,30 @@ router.post("/sign-in", async (req, res) => {    // sign in
   }
   try {
     const userExist = await User.findOne({ 
-      where: {
-        [Op.or]:[{email},{password}]
-      }
+      where: { email }
     });
-    if (!userExist) {
+    if(userExist)
+    {
+       bcrypt.compare(password, userExist.password, function(err, result) {
+         if (result) 
+         {
+             console.log(userExist.id,"id")
+             const token = jwt.sign({ id: userExist.id }, "ytrujm");
+             res.json({ token, user: userExist });
+         } else {
+           return res.json({ 
+             statusCode: 402,
+             message: "password does no mathed"
+           });
+        }
+      });
+    
+    } else {
       return res.json({ 
         statusCode: 401,
-        message: "email does no mathed"
+        message: "email does no matched"
       });
-    } else if (userExist.dataValues.password!==password) {
-      return res.json({ statusCode: 402, message: "wrong Password" });
-    } else {
-      const userExist = await User.findOne({ where: { email, password } });
-      if (userExist) {
-        const token = jwt.sign({ id: userExist.id }, "ytrujm");
-        res.json({ token, user: userExist });
-      } else if (!userExist) {
-        return res.json({
-          statusCode: 422,
-          message: "mismatched email and password",
-        });
-      }
-    }
+    } 
   } catch (error) {
     return res.status(500).json(error);
   }
@@ -141,6 +153,7 @@ router.put("/editPassword/:id", auth, async (req, res) => {  //edit password
     return res.json({ statusCode: 400, message: "Please add new-password" });
   } else {
     try {
+      
       const user = await User.update(
         { password: newPassword },
         { where: { id } }
