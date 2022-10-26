@@ -21,7 +21,7 @@ const initialState = {
   token:token
 }
 
-export const getAllUser = createAsyncThunk('user/getUser', async (values, thunkAPI) => {
+export const getAllUser = createAsyncThunk('/user', async (values, thunkAPI) => {
   try {  
     const response=await  axios.get(`http://localhost:5001/user`, {
         headers: {
@@ -40,7 +40,7 @@ export const getAllUser = createAsyncThunk('user/getUser', async (values, thunkA
 })
 
 const allUserSlice = createSlice({
-  name: 'initialReducer',
+  name: 'allUser',
   initialState,
   reducers: {},
   extraReducers: {

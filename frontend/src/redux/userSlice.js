@@ -2,9 +2,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import jwt_decode from "jwt-decode";
 import axios from 'axios';
 const token =localStorage.getItem('Token')
-const data = JSON.parse(localStorage.getItem('User'))
-const user = data.id
-console.log(user,"user")
+// const data = JSON.parse(localStorage.getItem('User'))
+// const user = data.id
+// console.log(user,"user")
 
 if(token && token !==  null ){
     console.log("token exists")  
@@ -16,8 +16,6 @@ if(token && token !==  null ){
 
 }
 
-
-
 const initialState = {
   initialValue: 0,
   name: 'hassan raza',
@@ -26,9 +24,9 @@ const initialState = {
   token:token
 }
 
-export const getData = createAsyncThunk('user/getUser', async (values, thunkAPI) => {
+export const getData = createAsyncThunk('user/getUser', async (id,values, thunkAPI) => {
   try {  
-    const response=await  axios.get(`http://localhost:5001/user/getUser/${user}`, {
+    const response=await  axios.get(`http://localhost:5001/user/getUser/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
        },

@@ -14,12 +14,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import allUserSlice  from './redux/allUserSlice';
 import userSlice from './redux/userSlice';
-
+import postSlice from './redux/postSlice';
 
 
 export default configureStore({
   reducer: {
     user:userSlice,
-    allUser:allUserSlice
+    allUser:allUserSlice,
+    post:postSlice
   }
 })

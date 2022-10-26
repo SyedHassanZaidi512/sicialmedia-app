@@ -14,8 +14,7 @@ import FavoriteBorder from "@mui/icons-material/FavoriteBorder"; //useless thing
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { getData} from "../redux/userSlice";
 import  {getAllUser} from "../redux/allUserSlice"
-import {getTasks} from "../redux/myRedux"
-
+import {getPosts} from "../redux/postSlice"
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
@@ -23,11 +22,12 @@ import "./styles/Post.css";
 import axios from "axios";
 
 function Allposts() {
+  const users=localStorage.getItem('User')
+  const id = users.id
   const token = useSelector((state) => state.user.token); // getting token
-  const [posts, setPosts] = useState([]);
+  // const [posts, setPosts] = useState([]);
   const [checked, setChecked] = useState(null);
-  // const [userData, setUserData] = useState([]);
-  const [allUser, setAllUser] = useState([]);
+  // const [allUser, setAllUser] = useState([]);
   const [followingPosts, setFollowingPosts] = useState([]);
   const [newComment, setNewComment] = useState("");
   const dispatch = useDispatch();
@@ -36,14 +36,18 @@ function Allposts() {
   useEffect(() => {
     getPostData();
     console.log("useEffect")
-    dispatch(getData())
+    dispatch(getData(id))
     dispatch(getAllUser())
+    dispatch(getPosts())
   }, []);
  
   const userData =useSelector((state)=> state.user.userData)
-  const allUserData = useSelector((state)=> state.allUser.allUserData)
-  console.log(allUserData,"alluserdata")
+  const allUser = useSelector((state)=> state.allUser.allUserData)
+  const posts = useSelector((state)=> state.post.posts)
+
+  console.log(allUser,"alluserdata")
   console.log(userData,"userData:");
+  console.log(posts,"posts")
   useEffect(() => {
     if (userData) {
       setData();
@@ -51,44 +55,11 @@ function Allposts() {
   }, []);
 
   const getPostData = async () => { // to get all the posts getPosts
-    try {
-      const res = await axios.get("http://localhost:5001/post/all-post", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      // dispatch(allPostCredentials(res.data));
-      const allPosts = res.data;
-      setPosts(allPosts);
-      setChecked(JSON.parse(localStorage.getItem("checked")));
-    } catch (err) {
-      console.log("error", err);
-    }
+    dispatch(getPosts())
   };
   const getUserData = async () => {
-
-    // const client = axios.create({
-    //   baseURL: "http://localhost:5001/user",
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //   },
-    // });
-    // console.log(userData,"usreData")
-    // try {
-    //   const res = await client.get(`getUser/${user}`);//get one users data 
-    //   setUserData(res.data);
-      
-    //   console.log(res.data, "current userData");
-    // } catch (err) {
-    //   console.log(err, "error");
-    // }
-    // try {
-    //   const response = await client.get(`/`);
-    //   // dispatch(allUsersCredentials(response.data));
-    //   setAllUser(response.data);
-    // } catch (err) {
-    //   console.log(err, "error");
-    // }
+    dispatch(getData())
+    dispatch(getAllUser())
   };
 
   const setData = () => { //filetring followings posts in private mode
@@ -185,7 +156,7 @@ function Allposts() {
       console.log(err, "error");
     }
   };
-
+ console.log(posts,"ps")
   return (checked === 0 ? followingPosts : posts).map((post) => (
     <div key={post.id} className="post">
       <Card
@@ -214,9 +185,9 @@ function Allposts() {
               },
             }}
           >
-            {/* <Avatar size="sm" src={ posts ?post.users.picture:"" } /> */}
+            {post.user.picture &&  <Avatar size="sm" src={ post.users.picture ?post.users.picture:"" } />}
           </Box>
-          {/* <Typography fontWeight="lg">{post.users.name}</Typography> */}
+           {post.user.name && <Typography fontWeight="lg">{post.users.name}</Typography>}
           <IconButton
             variant="plain"
             color="neutral"

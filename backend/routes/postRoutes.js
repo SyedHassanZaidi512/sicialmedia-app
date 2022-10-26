@@ -42,7 +42,7 @@ router.post("/:id/create-post", auth, async (req, res) => { // add post
   }
 });
 
-router.get("/all-post", auth, async (req, res) => {  //get app posts
+router.get("/allPost", auth, async (req, res) => {  //get app posts
   try {
     const AllPosts = await Post.findAll({
       include: ["users", "comments", "likes"],

@@ -2,9 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import jwt_decode from "jwt-decode";
 import axios from 'axios';
 const token =localStorage.getItem('Token')
-const user = localStorage.getItem('User')
-
-
 if(token && token !==  null ){
     console.log("token exists")  
     const decoded = jwt_decode(token);
@@ -18,56 +15,47 @@ if(token && token !==  null ){
 
 
 const initialState = {
-  initialValue: 0,
-  name: 'hassan raza',
-  userData:"",
+  name: 'posts',
+  posts:"",
   loading: false,
   token:token
 }
 
-export const getTasks = createAsyncThunk('user/getUser', async () => {
+export const getPosts = createAsyncThunk('getPost', async (values, thunkAPI) => {
   try {  
-    const response=await  axios.get(`http://localhost:5001/user/getUser/${user}`, {
+    const response=await  axios.get(`http://localhost:5001/post/allPost`, {
         headers: {
           Authorization: `Bearer ${token}`,
        },
     })
-    console.log(response,"response")
+    console.log(response,"responsePost")
     return response.data
   } catch (error) {
     console.log('this is the error: ', { error })
-    return ({
+    return thunkAPI.rejectWithValue({
       err: error.response.data.message,
       status: error.response.status
     })
   }
 })
 
-const indexReducer = createSlice({
-  name: 'initialReducer',
+const postSlice = createSlice({
+  name: 'post',
   initialState,
-  reducers: {
-    increment(state) {
-      state.initialValue++
-    },
-    decrement(state) {
-      state.initialValue--;
-    }
-  },
+  reducers: {},
   extraReducers: {
-    [getTasks.pending]: (state, action) => {
+    [getPosts.pending]: (state) => {
        state.loading=false
     },
-    [getTasks.fulfilled]: (state, action) => {
-        state.userData=action.payload
+    [getPosts.fulfilled]: (state, action) => {
+        state.posts=action.payload
         state.loading=false
     },
-    [getTasks.rejected]: (state, action) => {
+    [getPosts.rejected]: (state) => {
       state.loading=false
     }
   }
 });
 
+export default postSlice.reducer;
 
-export const { increment, decrement } = indexReducer.actions;
-export default indexReducer.reducer;
