@@ -2,9 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import jwt_decode from "jwt-decode";
 import axios from 'axios';
 const token =localStorage.getItem('Token')
-// const data = JSON.parse(localStorage.getItem('User'))
-// const user = data.id
-// console.log(user,"user")
 
 if(token && token !==  null ){
     console.log("token exists")  

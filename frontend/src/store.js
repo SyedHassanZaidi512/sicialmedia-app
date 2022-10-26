@@ -24,3 +24,4 @@ export default configureStore({
     post:postSlice
   }
 })
+

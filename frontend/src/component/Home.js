@@ -6,16 +6,17 @@ import { useSelector,useDispatch } from "react-redux";
 import { useEffect } from "react";
 
 
-function Home() {
- 
+function Home({userData}) {
+   const dispatch = useDispatch()
+   
   // const userss = useSelector((state) => state.user.allUserData);
-  const token = useSelector((state)=> state.user.token)
+  const token = localStorage.getItem('Token')
+
   console.log(token,"Data")
   return (
     <div className="home">
       <Navbar  /> 
        {token ? <Allposts /> : <h1>Please Login</h1>}
-      <Allposts/>
     </div>
   );
 }

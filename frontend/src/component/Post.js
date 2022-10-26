@@ -11,62 +11,59 @@ import Typography from "@mui/joy/Typography";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Button from "@mui/material/Button";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import {getData} from "../redux/userSlice"
+import { getPosts } from "../redux/postSlice";
+import { getAllUser } from "../redux/allUserSlice";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./styles/Post.css";
 
+
+
 export default function Post() {
-  const [allPost, setAllPost] = useState([]);
+  const user = JSON.parse(localStorage.getItem('User'))
+  const [allPost, setAllPost] = useState(useSelector(state => state.post.posts));
   const [newComment, setNewComment] = useState("");
   const [myPosts, setMyPosts] = useState([]);
   const [deleted, setDeleted] = useState("");
-  const [userData, setUserData] = useState([]);
-  const [allUser, setAllUser] = useState([]);
+  const [userData, setUserData] = useState(useSelector(state=> state.user.userData));
+  const [allUser, setAllUser] = useState(useSelector(state => state.allUser.allUserData));
+  const dispatch = useDispatch()
+
+  const loading = useSelector((state)=>state.user.loading)
+  console.log(loading,"scaj")
+  useEffect(() => {
+   dispatch(getAllUser())
+   dispatch(getPosts())
+   getMyData()
+  }, [])
+  
+  
+ 
   const token = useSelector((state) => state.user.token); //getting token from redux because
 
-  const getUserData = async () => {            //get one users data and all users
-    const user = localStorage.getItem("User");
-    const client = axios.create({
-      baseURL: "http://localhost:5001/user",
-      headers: {
-        Accept: "*/*",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });          
-    try {
-      const myResponse = await client.get(`getUser/${user}`); //current user
-      setUserData(myResponse.data);
-    } catch (error) {
-      console.log(error,"error")
-    }
-    try {
-      const response = await client.get(`/`); //all users
-      setAllUser(response.data);
-    } catch (error) {
-      console.log(error,"error")
-    }
+  console.log(userData,"state")
+   console.log(allPost,"//allpost")
+  const getUserData = async () => {            
+   
  
   };
-  const getPostData = async () => {   // to get all the posts getPosts
-    try {
-      const res = await axios.get("http://localhost:5001/post/all-post",{headers: {
-        Authorization: `Bearer ${token}`,
-      }});
-      const posts = res.data;
-      setAllPost(posts);
-    } catch (error) {
-      console.log(error,"error")
-    }    
+  const getMyData =  () => {   // to get all the posts getPosts
+        dispatch(getData(user.id))
   };
 
   const setData = () => {     //filetring my posts
+    if(!loading)
+    {
+      console.log("userDatainPosts")
       const posts = allPost.filter((post) => {
-      return post.userId === userData.id;
-    });
-    setMyPosts(posts);
+        return post.userId === userData.id;
+      });
+      setMyPosts(posts);
+    }
+     
   };
 
   const addCommentFunc = async (postId, userId) => {   //add comment method
@@ -81,9 +78,10 @@ export default function Post() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      getPostData();
-      getUserData();
-      setData();
+      dispatch(getAllUser())
+      dispatch(getPosts())
+      getMyData()
+      setData()
       setNewComment("");
       return res;
     } catch (error) {
@@ -107,8 +105,9 @@ export default function Post() {
         }
       );
         setDeleted(1 + 1);
-        getPostData();
-        getUserData();
+        dispatch(getAllUser())
+        dispatch(getPosts())
+        getMyData()
         setData();
       } catch (error) {
         console.log(error,"error")
@@ -127,8 +126,9 @@ export default function Post() {
           },
         }
       );
-      getPostData();
-      getUserData();
+      dispatch(getAllUser())
+      dispatch(getPosts())
+      getMyData()
       setData();
     
     } catch (error) {
@@ -137,6 +137,7 @@ export default function Post() {
   };
 
   const likeFunc = async (postId, likes) => {     // naming  done;
+    console.log(postId,"postId")
     const result =
       likes.filter((like) => {
         return like.userId === userData.id;
@@ -146,6 +147,10 @@ export default function Post() {
       : result === false
       ? removeLike(postId)
       : console.log("no function called");
+
+      dispatch(getAllUser())
+      dispatch(getPosts())
+      getMyData()
   };
 
   const addLike = async (
@@ -161,14 +166,13 @@ export default function Post() {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        getUserData(); // get all users data
-        getPostData();
+        dispatch(getAllUser())
+        dispatch(getPosts())
+        getMyData()
         return res;
      } catch (error) {
         console.log(error,"error") 
      }
-   
- 
   };
 
   const removeLike = async (
@@ -176,7 +180,7 @@ export default function Post() {
   ) => {
     try {
       const userId = userData.id;
-      if (postId) {return  toast.error(`postId missing`);}
+      if (!postId) {return  toast.error(`postId missing`);}
         const res = await axios.post(
           `http://localhost:5001/like/remove/${postId}`,
           { userId },
@@ -184,16 +188,18 @@ export default function Post() {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        getUserData(); // get all users data
-        getPostData();
+        dispatch(getAllUser())
+        dispatch(getPosts())
+        getMyData()
         return res;
     } catch (error) {
       console.log(error,"error")
     } 
   };
   useEffect(() => {
-    getPostData();
-    getUserData();
+    dispatch(getAllUser())
+    dispatch(getPosts())
+    getMyData()
   }, [token]);
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import SignIn from "./component/SignIn";
 import { ToastContainer } from "react-toastify";
 import Home from "./component/Home";
 import Profile from "./component/Profile";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import CreatePost from "./component/CreatePost";
@@ -15,16 +15,21 @@ import OtherUsers from "./component/OtherUsers";
 import OtherUserProfile from "./component/OtherUserProfile";
 import FollowingList from "./component/FollowingList.js";
 import FollowerList from "./component/FollowerList";
+import { getData} from "./redux/userSlice";
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+     dispatch(getData(myData.id))
+  }, [getData])
+  
   const token = useSelector((state) => state.user.token); //getting token from redux
-  const userData = JSON.parse(localStorage.getItem("User"));
-  const getData =() =>
-  {
+  const myData = JSON.parse(localStorage.getItem("User"));
+  console.log(myData,"userData")
 
-  }
-
-   
+  const userData = useSelector((state)=> state.user.userData)
+    
+  console.log(userData,"dataofUserfromredux")
 
 
   return (

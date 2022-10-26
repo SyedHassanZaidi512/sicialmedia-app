@@ -19,11 +19,12 @@ import { Link } from "react-router-dom";
 function Profile() {
   const [posts, setPosts] = useState("");
   const [post, setPost] = useState(0);
-  const [userData, setUserData] = useState("");
   const [image, setImage] = useState("");
+  const user = JSON.parse(localStorage.getItem('User'))
   const token = useSelector((state) => state.user.token); //getting token from redux because
   const dispatch = useDispatch();
-
+  const userData = useSelector((state=> (state.user.userData)))
+  console.log(userData,"Data")
   const client = axios.create({
     baseURL: "http://localhost:5001/user",
     headers: {
@@ -35,14 +36,11 @@ function Profile() {
 
   useEffect(() => {
     getData();
-  }, [image]);
+  }, [image,userData]);
 
-  const getData = async () => { //getting user  data from user id
+  const getData = async () => { 
     try {
-      const user = localStorage.getItem("User");
-      const res = await client.get(`getUser/${user}`);
-      setUserData(res.data);
-      const posts = res.data.posts;
+      const posts = userData.posts;
       setPosts(posts);
     } catch (error) {
       console.log(error, "error");
@@ -52,6 +50,7 @@ function Profile() {
   const UploadImage = async (event) => {   //Upload new  image
     console.log(event.target.files[0], "image");
     setImage(event.target.files[0]);
+    dispatch(getData(user.id))
     getData();
   };
 
@@ -64,6 +63,7 @@ function Profile() {
         const res = await client.put(`/editPic/${id}`, formdata);
         return res;
       }
+      dispatch(getData(user.id))
     } catch (error) {
       console.log(error, "error");
     }
@@ -74,12 +74,10 @@ function Profile() {
   }, [image]);
 
   const onLogout = () => {   //Logout func //
-    // dispatch(logOut());
-    // localStorage.removeItem("Token");
-    // localStorage.removeItem("User");
-    // localStorage.removeItem("checked");
-    // localStorage.removeItem("userData");
+    localStorage.removeItem("Token");
   };
+
+  console.log(posts,"state")
 
   return (
     <div className="profile">
@@ -276,14 +274,14 @@ function Profile() {
       </Box>
       {posts ? (
         post === 0 ? (
-          <Post userData={userData}  />
+          <Post  />
         ) : post === 1 ? (
           <Gallery userData={userData} />
         ) : (
           "nothing to show"
         )
       ) : (
-        "Please Login to see posts"
+        "No posts to see"
       )}
     </div>
   );

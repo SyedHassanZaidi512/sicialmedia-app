@@ -22,12 +22,12 @@ import "./styles/Post.css";
 import axios from "axios";
 
 function Allposts() {
-  const users=localStorage.getItem('User')
+  const users=JSON.parse(localStorage.getItem('User'))
   const id = users.id
   const token = useSelector((state) => state.user.token); // getting token
-  // const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState(useSelector((state)=> state.post.posts));
   const [checked, setChecked] = useState(null);
-  // const [allUser, setAllUser] = useState([]);
+  const [allUser, setAllUser] = useState(useSelector((state)=> state.allUser.allUserData));
   const [followingPosts, setFollowingPosts] = useState([]);
   const [newComment, setNewComment] = useState("");
   const dispatch = useDispatch();
@@ -42,8 +42,7 @@ function Allposts() {
   }, []);
  
   const userData =useSelector((state)=> state.user.userData)
-  const allUser = useSelector((state)=> state.allUser.allUserData)
-  const posts = useSelector((state)=> state.post.posts)
+
 
   console.log(allUser,"alluserdata")
   console.log(userData,"userData:");
@@ -157,8 +156,11 @@ function Allposts() {
     }
   };
  console.log(posts,"ps")
-  return (checked === 0 ? followingPosts : posts).map((post) => (
+ if(posts && followingPosts)
+ {  
+  return checked === 0 ? followingPosts : posts.map((post) => (
     <div key={post.id} className="post">
+      {console.log(post,"...........")}
       <Card
         variant="outlined"
         sx={{
@@ -185,9 +187,10 @@ function Allposts() {
               },
             }}
           >
-            {post.user.picture &&  <Avatar size="sm" src={ post.users.picture ?post.users.picture:"" } />}
+            {post.users.picture &&  <Avatar size="sm" src={ post.users.picture ?post.users.picture:"" } />}
           </Box>
-           {post.user.name && <Typography fontWeight="lg">{post.users.name}</Typography>}
+           {post.users.name && <Typography fontWeight="lg">{post.users.name}</Typography>}
+           {console.log(post.users,"users")}
           <IconButton
             variant="plain"
             color="neutral"
@@ -299,6 +302,10 @@ function Allposts() {
       </Card>
     </div>
   ));
+ }
+ else{
+   return (<h1>"wait for response"</h1>)
+ }
 }
 
 export default Allposts;
