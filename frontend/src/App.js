@@ -17,31 +17,15 @@ import FollowingList from "./component/FollowingList.js";
 import FollowerList from "./component/FollowerList";
 
 function App() {
-  const [userData, setUserData] = useState("");
   const token = useSelector((state) => state.user.token); //getting token from redux
-  const user = localStorage.getItem("User");
-  const getData = async () => { //getting user  data from user id
+  const userData = JSON.parse(localStorage.getItem("User"));
+  const getData =() =>
+  {
 
-    try {
-      const res = await axios.get(
-        `http://localhost:5001/user/getUser/${user}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return res.data;
-    } catch (error) {
-      console.log(error, "error");
-    }
-  };
+  }
 
-  useEffect(() => {
-    console.log("data")
-    getData();
-    localStorage.setItem("userData", JSON.stringify(userData));
-  }, []);
+   
+
 
   return (
     <Router>
@@ -61,7 +45,7 @@ function App() {
           <Route path="/sign-in" element={<SignIn />} />
           <Route
             path="/home"
-            element={<Home  />}
+            element={<Home userData={userData}  />}
           />
           <Route path="/profile" element={<Profile />} />
           <Route

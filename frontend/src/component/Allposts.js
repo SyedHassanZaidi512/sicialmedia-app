@@ -13,6 +13,7 @@ import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder"; //useless things removed
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { getData} from "../redux/userSlice";
+import  {getAllUser} from "../redux/allUserSlice"
 import {getTasks} from "../redux/myRedux"
 
 import { useDispatch, useSelector } from "react-redux";
@@ -31,19 +32,23 @@ function Allposts() {
   const [newComment, setNewComment] = useState("");
   const dispatch = useDispatch();
 
+  // console.log(dsta,"data////////")
   useEffect(() => {
     getPostData();
     console.log("useEffect")
-    dispatch(getTasks())
+    dispatch(getData())
+    dispatch(getAllUser())
   }, []);
  
   const userData =useSelector((state)=> state.user.userData)
-  console.log(userData,"setData:");
+  const allUserData = useSelector((state)=> state.allUser.allUserData)
+  console.log(allUserData,"alluserdata")
+  console.log(userData,"userData:");
   useEffect(() => {
     if (userData) {
       setData();
     }
-  }, [userData, posts, checked]);
+  }, []);
 
   const getPostData = async () => { // to get all the posts getPosts
     try {
@@ -61,7 +66,7 @@ function Allposts() {
     }
   };
   const getUserData = async () => {
-    const user = localStorage.getItem("User");  // all users
+
     // const client = axios.create({
     //   baseURL: "http://localhost:5001/user",
     //   headers: {

@@ -12,13 +12,14 @@
 
 
 import { configureStore } from '@reduxjs/toolkit';
-import indexReducer from './redux/myRedux';
-
+import allUserSlice  from './redux/allUserSlice';
+import userSlice from './redux/userSlice';
 
 
 
 export default configureStore({
   reducer: {
-    user:indexReducer,
+    user:userSlice,
+    allUser:allUserSlice
   }
 })

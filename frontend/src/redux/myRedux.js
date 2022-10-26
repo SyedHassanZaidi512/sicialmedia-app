@@ -25,7 +25,7 @@ const initialState = {
   token:token
 }
 
-export const getTasks = createAsyncThunk('user/getUser', async (values, thunkAPI) => {
+export const getTasks = createAsyncThunk('user/getUser', async () => {
   try {  
     const response=await  axios.get(`http://localhost:5001/user/getUser/${user}`, {
         headers: {
@@ -36,7 +36,7 @@ export const getTasks = createAsyncThunk('user/getUser', async (values, thunkAPI
     return response.data
   } catch (error) {
     console.log('this is the error: ', { error })
-    return thunkAPI.rejectWithValue({
+    return ({
       err: error.response.data.message,
       status: error.response.status
     })

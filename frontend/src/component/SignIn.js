@@ -12,6 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import userCredentials from "../redux/userSlice"
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import "./styles/SignUp.css";
@@ -84,9 +85,9 @@ export default function SignIn() {
             localStorage.removeItem("userData");
             console.log("previous token removed");
           }
+          console.log(res.data,",,,,,,,data")
           localStorage.setItem("Token", res.data.token);
-          localStorage.setItem("User", res.data.user.id);
-          // dispatch(userCredentials(res.data)); //this is sending token with user data
+          localStorage.setItem("User",  JSON.stringify(res.data.user));
           Navigate("/home");
         }
       }
