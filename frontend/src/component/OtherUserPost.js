@@ -22,7 +22,7 @@ function OtherUserPost({ userData, posts, currentUserData, getData }) {
   const [newComment, setNewComment] = useState("");
   const [myPosts, setMyPosts] = useState([]);
   const [allUser, setAllUser] = useState([]);
-  const token = useSelector((state) => state.auth.token); //getting token from redux because
+  const token = useSelector((state) => state.user.token); //getting token from redux because
 
   const getUserData = async () => {
     try {

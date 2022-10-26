@@ -66,7 +66,7 @@ function OtherUsers({ userData, getData }) {
   const [users, setUsers] = useState([]);
   const [showDetails, setShowDetails] = useState(0);
   const [otherUserData, setOtherUserData] = useState([]);
-  const token = useSelector((state) => state.auth.token); //getting token from redux because
+  const token = useSelector((state) => state.user.token); //getting token from redux because
 
   useEffect(() => {
     getAllUsersData();

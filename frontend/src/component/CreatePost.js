@@ -20,7 +20,7 @@ import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 
 function CreatePost({ userData }) {
-  const token = useSelector((state) => state.auth.token); // getting token
+  const token = useSelector((state) => state.user.token); // getting token
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [show, setShow] = useState("");

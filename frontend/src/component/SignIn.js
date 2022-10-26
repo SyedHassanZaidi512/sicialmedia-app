@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
-import { userCredentials, logOut } from "../auth/authSlice";
+// import { userCredentials, logOut } from "../x/userSlice";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -32,7 +32,7 @@ export default function SignIn() {
   const [boolError1, setBoolError1] = useState("");
   const [helperText2, setHelperText2] = useState("");
   const [boolError2, setBoolError2] = useState("");
-  const token = useSelector((state) => state.auth.token);
+  const token = useSelector((state) => state.user.token);
   const dispatch = useDispatch();
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -77,7 +77,7 @@ export default function SignIn() {
           notify();
         } else {
           if (token) {
-            dispatch(logOut());
+            // dispatch(logOut());
             localStorage.removeItem("Token");
             localStorage.removeItem("User");
             localStorage.removeItem("checked");
@@ -86,7 +86,7 @@ export default function SignIn() {
           }
           localStorage.setItem("Token", res.data.token);
           localStorage.setItem("User", res.data.user.id);
-          dispatch(userCredentials(res.data)); //this is sending token with user data
+          // dispatch(userCredentials(res.data)); //this is sending token with user data
           Navigate("/home");
         }
       }

@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import { useDispatch, useSelector } from "react-redux";
-import { userCredentials, logOut } from "../auth/authSlice";
+// import { userCredentials, logOut } from "../redux/userSlice";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -40,7 +40,7 @@ export default function SignUp() {
   });
 
   const [loading, setLoading] = useState(false);
-  const token = useSelector((state) => state.auth.token);
+  const token = useSelector((state) => state.user.token);
 
   const dispatch = useDispatch();
   const handleSubmit = async (event) => {
@@ -76,7 +76,7 @@ export default function SignUp() {
     formdata.append("email", email);
     formdata.append("password", password);
     if (token) {
-      dispatch(logOut());
+      // dispatch(logOut());
       localStorage.removeItem("Token");
       localStorage.removeItem("User");
       localStorage.removeItem("checked");
@@ -94,7 +94,7 @@ export default function SignUp() {
     } else {
       localStorage.setItem("Token", res.data.token);
       localStorage.setItem("User", res.data.user.id);
-      dispatch(userCredentials(res.data)); //this is sending token with user data in redux
+      // dispatch(userCredentials(res.data)); //this is sending token with user data in redux
       Navigate("/home");
     }
   };

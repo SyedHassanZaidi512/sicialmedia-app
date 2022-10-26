@@ -1,0 +1,22 @@
+const response = await axois.get('url',{
+    headers: {
+        'Authorization': 'JWT fefege...'
+    },
+})
+
+
+const respose = posts.filter( post => return userId === postId)
+
+
+handleChanged
+
+
+const data = {
+    name: "hassan"
+}
+
+data.text = "hello world"
+
+
+/user/
+address/store

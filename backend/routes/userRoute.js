@@ -118,6 +118,7 @@ router.get("/", auth, async (req, res) => {  //get User
 });
 
 router.get("/getUser/:id", auth, async (req, res) => { //getspecific User
+  console.log("apihoy")
   const id = req.params.id;
   try {
     const user = await User.findOne({

@@ -2,20 +2,20 @@ import React from "react";
 import Navbar from "./Navbar";
 import Allposts from "./Allposts";
 import "./styles/Home.css";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { useEffect } from "react";
 
-function Home({ userData,getData }) {
 
-  const token = useSelector((state) => state.auth.token);
-  useEffect(() => {
-   getData()
-  }, [])
-
+function Home() {
+ 
+  // const userss = useSelector((state) => state.user.allUserData);
+  const token = useSelector((state)=> state.user.token)
+  console.log(token,"Data")
   return (
     <div className="home">
-      <Navbar userData={userData} />
-      {token ? <Allposts userData={userData}/> : <h1>Please Login</h1>}
+      <Navbar  /> 
+       {token ? <Allposts /> : <h1>Please Login</h1>}
+      <Allposts/>
     </div>
   );
 }

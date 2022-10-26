@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 
 function Navbar({ userData }) {
 
-  const token = useSelector((state) => state.auth.token);
+  const token = useSelector((state) => state.user.token);
   return (                       
     <div className="navbar">
       <Box sx={{ flexGrow: 1 }}>

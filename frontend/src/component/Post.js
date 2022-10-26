@@ -24,7 +24,7 @@ export default function Post() {
   const [deleted, setDeleted] = useState("");
   const [userData, setUserData] = useState([]);
   const [allUser, setAllUser] = useState([]);
-  const token = useSelector((state) => state.auth.token); //getting token from redux because
+  const token = useSelector((state) => state.user.token); //getting token from redux because
 
   const getUserData = async () => {            //get one users data and all users
     const user = localStorage.getItem("User");

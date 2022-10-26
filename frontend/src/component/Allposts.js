@@ -12,30 +12,35 @@ import Typography from "@mui/joy/Typography";
 import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder"; //useless things removed
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import { getData} from "../redux/userSlice";
+import {getTasks} from "../redux/myRedux"
+
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import "./styles/Post.css";
 import axios from "axios";
 
 function Allposts() {
-  const token = useSelector((state) => state.auth.token); // getting token
+  const token = useSelector((state) => state.user.token); // getting token
   const [posts, setPosts] = useState([]);
   const [checked, setChecked] = useState(null);
-  const [userData, setUserData] = useState([]);
+  // const [userData, setUserData] = useState([]);
   const [allUser, setAllUser] = useState([]);
   const [followingPosts, setFollowingPosts] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getUserData(); // get all users data
     getPostData();
-  }, [checked]);
-
+    console.log("useEffect")
+    dispatch(getTasks())
+  }, []);
+ 
+  const userData =useSelector((state)=> state.user.userData)
+  console.log(userData,"setData:");
   useEffect(() => {
-    console.log(userData, "userData");
     if (userData) {
-      console.log("setData:");
       setData();
     }
   }, [userData, posts, checked]);
@@ -47,6 +52,7 @@ function Allposts() {
           Authorization: `Bearer ${token}`,
         },
       });
+      // dispatch(allPostCredentials(res.data));
       const allPosts = res.data;
       setPosts(allPosts);
       setChecked(JSON.parse(localStorage.getItem("checked")));
@@ -56,25 +62,28 @@ function Allposts() {
   };
   const getUserData = async () => {
     const user = localStorage.getItem("User");  // all users
-    const client = axios.create({
-      baseURL: "http://localhost:5001/user",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    try {
-      const res = await client.get(`getUser/${user}`);//get one users data 
-      setUserData(res.data);
-      console.log(res.data, "current userData");
-    } catch (err) {
-      console.log(err, "error");
-    }
-    try {
-      const response = await client.get(`/`);
-      setAllUser(response.data);
-    } catch (err) {
-      console.log(err, "error");
-    }
+    // const client = axios.create({
+    //   baseURL: "http://localhost:5001/user",
+    //   headers: {
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    // });
+    // console.log(userData,"usreData")
+    // try {
+    //   const res = await client.get(`getUser/${user}`);//get one users data 
+    //   setUserData(res.data);
+      
+    //   console.log(res.data, "current userData");
+    // } catch (err) {
+    //   console.log(err, "error");
+    // }
+    // try {
+    //   const response = await client.get(`/`);
+    //   // dispatch(allUsersCredentials(response.data));
+    //   setAllUser(response.data);
+    // } catch (err) {
+    //   console.log(err, "error");
+    // }
   };
 
   const setData = () => { //filetring followings posts in private mode
@@ -172,7 +181,7 @@ function Allposts() {
     }
   };
 
-  return (checked == 0 ? followingPosts : posts).map((post) => (
+  return (checked === 0 ? followingPosts : posts).map((post) => (
     <div key={post.id} className="post">
       <Card
         variant="outlined"
@@ -200,9 +209,9 @@ function Allposts() {
               },
             }}
           >
-            <Avatar size="sm" src={post.users.picture} />
+            {/* <Avatar size="sm" src={ posts ?post.users.picture:"" } /> */}
           </Box>
-          <Typography fontWeight="lg">{post.users.name}</Typography>
+          {/* <Typography fontWeight="lg">{post.users.name}</Typography> */}
           <IconButton
             variant="plain"
             color="neutral"
@@ -273,8 +282,8 @@ function Allposts() {
               color="neutral"
               sx={{ ml: -1 }}
             >
-              {allUser
-                .filter((user) => {
+              {allUser && allUser
+                  .filter((user) => {
                   return comment.userId === user.id;
                 })
                 .map((user) => (

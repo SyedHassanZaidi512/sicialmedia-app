@@ -22,7 +22,7 @@ function Settings({ userData, getData }) {
   const theme = createTheme();
   const [boolError, setBoolError] = useState(false);
  
-  const token = useSelector((state) => state.auth.token); //getting token from redux because
+  const token = useSelector((state) => state.user.token); //getting token from redux because
 
   useEffect(() => {
      getData()

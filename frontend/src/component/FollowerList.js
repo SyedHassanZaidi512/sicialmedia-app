@@ -1,7 +1,6 @@
 import * as React from "react";
 import Card from "@mui/material/Card";
 import "./styles/OtherUser.css";
-import axios from "axios";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -11,30 +10,26 @@ import PostAddIcon from "@mui/icons-material/PostAdd"; // removed useless import
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "../component/styles/Navbar.css";
+import { 
+  userCredentials,
+ } from "../redux/userSlice";
 import { Link } from "react-router-dom";
 
-function FollowerList({ userData }) { //states
-  const [users, setUsers] = useState([]);
-  const token = useSelector((state) => state.auth.token); //getting token from redux because
+
+function FollowerList() { //states
+  const token = useSelector((state) => state.user.token);
+  const allUsers = useSelector((state) =>  (state.user.allUserData));
+  const userData = useSelector((state) =>  (state.user.userData));
+  console.log(token,"token")
+  console.log(userData,"userData")
   useEffect(() => {
-    getData();
+    console.log(allUsers,"allUsers")
   }, []);
-  const getData = async () => {
-    try {
-      const response = await axios.get("http://localhost:5001/user", {     //get all users when page loaded
-      headers: {
-        Authorization: `Bearer ${token}`, //recomemded like this  //  done
-      },
-    });
-    setUsers(response.data);
-    } catch (err) {
-     console.log(err,"error") 
-    }
-    
-  };
-  const Myfollower = users.filter((user) => {//filter indentation done and changes done 3
+  
+
+  const Myfollower = allUsers.filter((user) => {//filter indentation done and changes done 3
     return userData.followers.map((follower) => follower.followerId).includes(user.id);
   });
   return (

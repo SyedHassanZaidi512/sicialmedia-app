@@ -17,7 +17,7 @@ function OtherUserProfile({ otherUserData, currentUserData, getData }) {
   const [post, setPost] = useState(0);
   const [userData, setUserData] = useState(otherUserData[0]);
   const [posts, setPosts] = useState(otherUserData[0].posts);
-  const token = useSelector((state) => state.auth.token); //getting token from redux
+  const token = useSelector((state) => state.user.token); //getting token from redux
   const handleFollow = () => {
     const result =
       currentUserData.followings.filter((following) => {

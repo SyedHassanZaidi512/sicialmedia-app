@@ -19,11 +19,12 @@ import { Link } from "react-router-dom";
 
 function FollowingList() {
   const [users, setUsers] = useState([]);
-  const [userData, setUserData] = useState([]);
+  // const [userData, setUserData] = useState([]);
   const [myFollowing, setMyFollowing] = useState([]);
-  const user = localStorage.getItem("User"); //getting user Id from localStorage
-  const token = useSelector((state) => state.auth.token); //getting token from redux because problem is solved by adding some logic in redux
+  const token = useSelector((state) => state.user.token); //getting token from redux because problem is solved by adding some logic in redux
+  const userData = useSelector((state)=>state.user.userData)
 
+  console.log(userData,"Data");
   const client = axios.create({
     baseURL: "http://localhost:5001/user",
     headers: {
@@ -33,15 +34,7 @@ function FollowingList() {
     },
   });
 
-  const getCurrentUser = async () => { //getCurrent user's Data
-    try {
-      const res = await client.get(`getUser/${user}`);
-      setUserData(res.data);
-    } catch (err) {
-      console.log(err, "error");
-    }
-  };
-
+ 
   const getData = async () => {   //get All users Data
     try {
       const res = await client.get(`/`);
@@ -53,6 +46,7 @@ function FollowingList() {
 
   const setData = () => {
     const MyFollowing = users.filter((user) => {   //Filtering Followings Data from all data   //recommended 3  //done
+      console.log(userData.followings,"followings")
       return userData.followings
         .map((following) => following.followingId)
         .includes(user.id);
@@ -60,20 +54,11 @@ function FollowingList() {
     setMyFollowing(MyFollowing);
   };
 
-  useEffect(() => {  //useEffects
-    getCurrentUser();
-    getData();
-  }, []);
-  useEffect(() => {
-    setData();
-  }, [users]);
-
   const UnFollowFunc = (id) => {  //UnFollow Func
     setFollowing(id);
     setFollower(id);
     setData();
     getData();
-    getCurrentUser();
   };
 
   const setFollowing = async (id) => {

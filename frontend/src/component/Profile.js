@@ -14,14 +14,14 @@ import { useEffect, useState } from "react";
 import "./styles/Profile.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { logOut } from "../auth/authSlice";
+// import { logOut } from "../redux/userSlice";
 
 function Profile() {
   const [posts, setPosts] = useState("");
   const [post, setPost] = useState(0);
   const [userData, setUserData] = useState("");
   const [image, setImage] = useState("");
-  const token = useSelector((state) => state.auth.token); //getting token from redux because
+  const token = useSelector((state) => state.user.token); //getting token from redux because
   const dispatch = useDispatch();
 
   const client = axios.create({
@@ -74,11 +74,11 @@ function Profile() {
   }, [image]);
 
   const onLogout = () => {   //Logout func //
-    dispatch(logOut());
-    localStorage.removeItem("Token");
-    localStorage.removeItem("User");
-    localStorage.removeItem("checked");
-    localStorage.removeItem("userData");
+    // dispatch(logOut());
+    // localStorage.removeItem("Token");
+    // localStorage.removeItem("User");
+    // localStorage.removeItem("checked");
+    // localStorage.removeItem("userData");
   };
 
   return (
