@@ -15,7 +15,6 @@ if(token && token !==  null ){
 
 
 const initialState = {
-  name: 'hassan raza',
   allUserData:"",
   loading: false,
   token:token

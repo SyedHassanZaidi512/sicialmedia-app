@@ -12,24 +12,25 @@ import Stack from "@mui/material/Stack";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "../component/styles/Navbar.css";
-import { 
-  userCredentials,
- } from "../redux/userSlice";
+
 import { Link } from "react-router-dom";
+import { getAllUser } from "../redux/allUserSlice";
 
 
-function FollowerList() { //states
+function FollowerList({userData,myData}) { //states
   const token = useSelector((state) => state.user.token);
-  const allUsers = useSelector((state) =>  (state.user.allUserData));
-  const userData = useSelector((state) =>  (state.user.userData));
+  const allUsers = useSelector((state) =>  (state.allUser.allUserData));
+  const dispatch = useDispatch()
+  // const userData = useSelector((state) =>  (state.user.userData));
   console.log(token,"token")
   console.log(userData,"userData")
   useEffect(() => {
+    dispatch(getAllUser())
     console.log(allUsers,"allUsers")
   }, []);
   
 
-  const Myfollower = allUsers.filter((user) => {//filter indentation done and changes done 3
+  const Myfollower = allUsers?.filter((user) => {//filter indentation done and changes done 3
     return userData.followers.map((follower) => follower.followerId).includes(user.id);
   });
   return (
@@ -91,7 +92,7 @@ function FollowerList() { //states
       </div>
 
       <div className="otherprofile">
-        {Myfollower.map((user) => (
+        {Myfollower?.map((user) => (
           <Box
             sx={{
               marginTop: 0,

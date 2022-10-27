@@ -12,41 +12,32 @@ import Typography from "@mui/material/Typography";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
+import { getAllUser } from "../redux/allUserSlice";
+import { getData } from "../redux/userSlice";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "../component/styles/Navbar.css";
 import { Link } from "react-router-dom";
 
-function FollowingList() {
-  const [users, setUsers] = useState([]);
-  // const [userData, setUserData] = useState([]);
+function FollowingList({ userData, myData }) {
   const [myFollowing, setMyFollowing] = useState([]);
-  const token = useSelector((state) => state.user.token); //getting token from redux because problem is solved by adding some logic in redux
-  const userData = useSelector((state)=>state.user.userData)
+  const token = localStorage.getItem("Token");
+  const users = useSelector((state) => state.allUser.allUserData);
+  const dispatch = useDispatch();
 
-  console.log(userData,"Data");
-  const client = axios.create({
-    baseURL: "http://localhost:5001/user",
-    headers: {
-      Accept: "*/*",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  useEffect(() => {
+    getAllUserData();
+  }, []);
 
- 
-  const getData = async () => {   //get All users Data
-    try {
-      const res = await client.get(`/`);
-      setUsers(res.data);
-    } catch (err) {
-      console.log(err, "error");
-    }
+  const getAllUserData = async () => {  //get All users Data
+    dispatch(getAllUser());
+    dispatch(getData(myData.id))
+    setData();
   };
 
   const setData = () => {
-    const MyFollowing = users.filter((user) => {   //Filtering Followings Data from all data   //recommended 3  //done
-      console.log(userData.followings,"followings")
+    const MyFollowing = users.filter((user) => { //Filtering Followings Data from all data   //recommended 3  //done
+      console.log(userData.followings, "followings");
       return userData.followings
         .map((following) => following.followingId)
         .includes(user.id);
@@ -57,8 +48,7 @@ function FollowingList() {
   const UnFollowFunc = (id) => {  //UnFollow Func
     setFollowing(id);
     setFollower(id);
-    setData();
-    getData();
+    getAllUserData();
   };
 
   const setFollowing = async (id) => {
@@ -82,6 +72,7 @@ function FollowingList() {
     } catch (error) {
       console.log(error, "error");
     }
+    getAllUserData()
   };
 
   const setFollower = async (id) => {
@@ -99,11 +90,13 @@ function FollowingList() {
       );
       if (res.data.statusCode === 422 || !res) {
       } else {
-        getData(); // to see changes immediately
+        getAllUserData(); // to see changes immediately
       }
     } catch (err) {
       console.log(err, "error");
     }
+
+    console.log(myFollowing, "myFollowing");
   };
   return (
     <div>
@@ -159,6 +152,7 @@ function FollowingList() {
           </AppBar>
         </Box>
       </div>
+      {console.log(myFollowing, "myFollowing")}
       <div className="otherprofile">
         {myFollowing.map((user) => (
           <Box

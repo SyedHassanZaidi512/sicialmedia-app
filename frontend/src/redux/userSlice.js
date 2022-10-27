@@ -14,8 +14,6 @@ if(token && token !==  null ){
 }
 
 const initialState = {
-  initialValue: 0,
-  name: 'hassan raza',
   userData:"",
   loading: false,
   token:token
@@ -40,7 +38,7 @@ export const getData = createAsyncThunk('user/getUser', async (id,values, thunkA
 })
 
 const userSlice = createSlice({
-  name: 'initialReducer',
+  name: 'user',
   initialState,
   reducers: {},
   extraReducers: {

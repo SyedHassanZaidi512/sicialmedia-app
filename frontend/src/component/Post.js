@@ -309,8 +309,8 @@ export default function Post({userData}) {
                 color="neutral"
                 sx={{ ml: -1 }}
               >
-                {allUser
-                  .filter((user) => {
+                {allUser.length> 0 
+                  && allUser.filter((user) => {
                     return com.userId === user.id;
                   })
                   .map((user) => (

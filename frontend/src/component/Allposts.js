@@ -62,7 +62,7 @@ function Allposts() {
   };
 
   const setData = () => { //filetring followings posts in private mode
-    const MyFollowing = posts?.filter((post) => {   //  filter recommended 3 done
+    const MyFollowing = posts.length > 0 && posts.filter((post) => {   //  filter recommended 3 done
       return userData.followings
         .map((following) => following.followingId)
         .includes(post.userId);

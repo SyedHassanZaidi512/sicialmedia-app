@@ -13,11 +13,13 @@ import "./styles/Profile.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-function OtherUserProfile({ otherUserData, currentUserData, getData }) {
+function OtherUserProfile({ otherUserData, currentUserData,getAllUsersData }) {
   const [post, setPost] = useState(0);
   const [userData, setUserData] = useState(otherUserData[0]);
   const [posts, setPosts] = useState(otherUserData[0].posts);
-  const token = useSelector((state) => state.user.token); //getting token from redux
+  const token =localStorage.getItem('Token')
+  const dispatch = useDispatch()
+ 
   const handleFollow = () => {
     const result =
       currentUserData.followings.filter((following) => {
@@ -33,7 +35,7 @@ function OtherUserProfile({ otherUserData, currentUserData, getData }) {
   const FollowFunc = async (id) => {  //following method
     setFollowing(id);
     setFollower(id);
-    getData();
+    getAllUsersData();
   };
 
   const setFollowing = async (id) => {
@@ -49,7 +51,7 @@ function OtherUserProfile({ otherUserData, currentUserData, getData }) {
           },
         }
       );
-      getData();
+      getAllUsersData();
       if (user.data.statusCode === 422) {
         return toast.error(user.data.message);
       } else {
@@ -74,6 +76,7 @@ function OtherUserProfile({ otherUserData, currentUserData, getData }) {
           },
         }
       );
+      getAllUsersData();
       if (res.data.statusCode === 422 || !res) {
         console.log(res.data.message, "error");
       } else {
@@ -87,6 +90,7 @@ function OtherUserProfile({ otherUserData, currentUserData, getData }) {
   const UnFollowFunc = (id) => {//UnFollow Func
     removeFollowing(id);
     removeFollower(id);
+    getAllUsersData();
   };
 
   const removeFollowing = async (id) => {
@@ -102,9 +106,9 @@ function OtherUserProfile({ otherUserData, currentUserData, getData }) {
           },
         }
       );
-      getData();
+      getAllUsersData();
       if (user.data.statusCode === 422) {
-        return toast.error(user.data.message);
+        return user.data.message
       } else {
         return toast.success(`Un Followed`);
       }
@@ -126,10 +130,11 @@ function OtherUserProfile({ otherUserData, currentUserData, getData }) {
           },
         }
       );
+      getAllUsersData();
       if (res.data.statusCode === 422 || !res) {
-        return toast.error(res.data.message);
+        return res.data.message
       } else {
-        getData(); // to see changes immediately
+        getAllUsersData(); // to see changes immediately
       }
     } catch (error) {
       console.log(error,"error")
@@ -299,7 +304,6 @@ function OtherUserProfile({ otherUserData, currentUserData, getData }) {
             posts={userData.posts}
             currentUserData={currentUserData}
             userData={userData}
-            getData={getData}
           />
         ) : post === 1 ? (
           <Gallery userData={userData} />

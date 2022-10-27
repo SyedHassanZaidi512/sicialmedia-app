@@ -12,49 +12,52 @@ import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Button from "@mui/material/Button";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
+import { getAllUser } from "../redux/allUserSlice";
+import {getPosts} from "../redux/postSlice"
 import axios from "axios";
 import "./styles/Post.css";
 
-function OtherUserPost({ userData, posts, currentUserData, getData }) {
-  const [allPost, setAllPost] = useState([]);
-  const [newComment, setNewComment] = useState("");
-  const [myPosts, setMyPosts] = useState([]);
-  const [allUser, setAllUser] = useState([]);
-  const token = useSelector((state) => state.user.token); //getting token from redux because
 
-  const getUserData = async () => {
-    try {
-      const response = await axios.get(`http://localhost:5001/user/`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }); //all users
-      setAllUser(response.data);
-    } catch (error) {
-      console.log(error, "error");
-    }
+function OtherUserPost({ userData, posts, currentUserData}) {
+ 
+  const [newComment, setNewComment] = useState("");
+  const [myPosts, setMyPosts] =useState([]); 
+  const allUser= useSelector(state => state.allUser.allUserData)
+  const allPost = useSelector(state => state.post.posts)
+  const token = useSelector((state) => state.user.token); //getting token from redux because
+  console.log(allPost,"allposts")
+  const dispatch=useDispatch()
+  useEffect(() => {
+    dispatch(getAllUser())
+    dispatch(getPosts())
+    setData()
+  }, [])
+  
+  const getUserData =  () => {
+      
   };
   const getPostData = async () => { // to get all the posts getPosts
-    try {
-      const res = await axios.get("http://localhost:5001/post/all-post", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const posts = res.data;
-      setAllPost(posts);
-    } catch (error) {
-      console.log(error, "error");
-    }
+    dispatch(getPosts())
+    // try {
+    //   const res = await axios.get("http://localhost:5001/post/all-post", {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //   });
+    //   const posts = res.data;
+    //   setAllPost(posts);
+    // } catch (error) {
+    //   console.log(error, "error");
+    // }
   };
 
   const setData = () => { //filetring my posts
-    const posts = allPost.filter((post) => {
+    const posTs = allPost.length>0 && allPost.filter((post) => {
       return post.userId === userData.id;
     });
-    setMyPosts(posts);
+    setMyPosts(posTs);
   };
 
   const addCommentFunc = async (postId, userId) => {  //add comment method
@@ -69,7 +72,7 @@ function OtherUserPost({ userData, posts, currentUserData, getData }) {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      getData();
+       //getAllUsersData();
       getPostData();
       getUserData();
       setData();
@@ -106,7 +109,7 @@ function OtherUserPost({ userData, posts, currentUserData, getData }) {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    getData();
+     //getAllUsersData();
     getUserData(); // get all users data
     getPostData();
     return res;
@@ -127,7 +130,7 @@ function OtherUserPost({ userData, posts, currentUserData, getData }) {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      getData();
+       //getAllUsersData();
       getUserData(); // get all users data
       getPostData();
       return res;
@@ -135,17 +138,17 @@ function OtherUserPost({ userData, posts, currentUserData, getData }) {
       console.log("error", error);
     }
   };
-  useEffect(() => {
-    getData();
-    getPostData();
-    getUserData();
-  }, [token]);
+  // useEffect(() => {
+  //    //getAllUsersData();
+  //   getPostData();
+  //   getUserData();
+  // }, [token]);
 
-  useEffect(() => {
-    if (userData) {
-      setData();
-    }
-  }, [allPost, userData, addCommentFunc]);
+  // useEffect(() => {
+  //   if (userData) {
+  //     setData();
+  //   }
+  // }, [allPost, userData, addCommentFunc]);
 
   return posts ? (
     myPosts.map((post) => (

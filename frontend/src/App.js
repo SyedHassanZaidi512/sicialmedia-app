@@ -65,7 +65,7 @@ function App() {
           />
           <Route
             path="/otherusers"
-            element={<OtherUsers getData={getData} userData={userData} />}
+            element={<OtherUsers myData={myData} userData={userData} />}
           />
           <Route
             path="/otheruserprofile"
@@ -73,11 +73,11 @@ function App() {
           />
           <Route
             path="/followinglist"
-            element={<FollowingList userData={userData} />}
+            element={<FollowingList userData={userData} myData={myData}/>}
           />
           <Route
             path="/followerlist"
-            element={<FollowerList userData={userData} />}
+            element={<FollowerList userData={userData} myData={myData} />}
           />
           <Route path="/" element={<SignUp />} />
         </Routes>

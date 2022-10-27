@@ -16,7 +16,8 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import Avatar from "@mui/material/Avatar";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import Stack from "@mui/material/Stack";
-
+import { getData } from "../redux/userSlice";
+import { getAllUser } from "../redux/allUserSlice";
 import { useEffect, useState } from "react";
 import { useSelector,useDispatch } from "react-redux";
 import "../component/styles/Navbar.css";
@@ -62,34 +63,26 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-function OtherUsers({ userData, getData }) {
+function OtherUsers({userData,myData}) {
   const [search, setSearch] = useState("");
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
+  const users = useSelector(state => state.allUser.allUserData)
   const [showDetails, setShowDetails] = useState(0);
   const [otherUserData, setOtherUserData] = useState([]);
   const token = useSelector((state) => state.user.token); //getting token from redux because
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch()
     getAllUsersData();
   }, []);
 
   const getAllUsersData = async () => {
-    try {
-      const res = await axios.get(`http://localhost:5001/user`, {  //getting all  users  data
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setUsers(res.data);
-    } catch (error) {
-      console.log(error, "error");
-    }
+    dispatch(getAllUser())
+    dispatch(getData(myData.id))
   };
 
   const handleFollow = (id) => {
     const result =
-      userData.followings.filter((following) => {
+      userData?.followings.filter((following) => {
         return following.followingId === id;
       }).length === 0;
     console.log(result, "result");
@@ -103,7 +96,6 @@ function OtherUsers({ userData, getData }) {
   const FollowFunc = async (id) => { //following method
     setFollowing(id);
     setFollower(id);
-    getData();
     getAllUsersData();
   };
 
@@ -201,7 +193,7 @@ function OtherUsers({ userData, getData }) {
       getAllUsersData();
       if (res.data.statusCode === 422 || !res) {
       } else {
-        getData(); // to see changes immediately
+        dispatch(getData(myData.id)); // to see changes immediately
       }
     } catch (error) {
       console.log(error, "error");
@@ -211,7 +203,7 @@ function OtherUsers({ userData, getData }) {
   const handleClick = (id) => { //show user details
     console.log(id, "userId");
     setShowDetails(1);
-    const otherUser = users.filter((user) => {
+    const otherUser = users?.filter((user) => {
       return user.id === id;
     });
     setOtherUserData(otherUser);
@@ -298,7 +290,7 @@ function OtherUsers({ userData, getData }) {
           {" "}
           <div className="otherprofile">
             {token
-              ? users
+              ? users.length>0  && users
                   .filter((user) => {
                     if (search === "") {
                       return null;
@@ -416,7 +408,6 @@ function OtherUsers({ userData, getData }) {
           currentUserData={userData}
           getAllUsersData={getAllUsersData}
           handleClick={handleClick}
-          getData={getData}
         />
       )}
     </div>

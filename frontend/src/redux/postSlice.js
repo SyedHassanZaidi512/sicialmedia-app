@@ -15,7 +15,6 @@ if(token && token !==  null ){
 
 
 const initialState = {
-  name: 'posts',
   posts:"",
   loading: false,
   token:token
@@ -40,7 +39,7 @@ export const getPosts = createAsyncThunk('getPost', async (values, thunkAPI) => 
 })
 
 const postSlice = createSlice({
-  name: 'post',
+  name: 'posts',
   initialState,
   reducers: {},
   extraReducers: {
