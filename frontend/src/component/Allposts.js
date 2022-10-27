@@ -25,7 +25,7 @@ function Allposts() {
   const users=JSON.parse(localStorage.getItem('User'))
   const id = users.id
   const token = useSelector((state) => state.user.token); // getting token
-  const [posts, setPosts] = useState(useSelector((state)=> state.post.posts));
+  const posts = useSelector((state)=> state.post.posts);
   const [checked, setChecked] = useState(null);
   const [allUser, setAllUser] = useState(useSelector((state)=> state.allUser.allUserData));
   const [followingPosts, setFollowingPosts] = useState([]);
@@ -56,13 +56,13 @@ function Allposts() {
   const getPostData = async () => { // to get all the posts getPosts
     dispatch(getPosts())
   };
-  const getUserData = async () => {
-    dispatch(getData())
+  const getUserData =  () => {
+    // dispatch(getData(id))
     dispatch(getAllUser())
   };
 
   const setData = () => { //filetring followings posts in private mode
-    const MyFollowing = posts.filter((post) => {   //  filter recommended 3 done
+    const MyFollowing = posts?.filter((post) => {   //  filter recommended 3 done
       return userData.followings
         .map((following) => following.followingId)
         .includes(post.userId);

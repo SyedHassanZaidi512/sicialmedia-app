@@ -19,16 +19,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./styles/Post.css";
+import Allposts from "./Allposts";
 
 
 
-export default function Post() {
+export default function Post({userData}) {
   const user = JSON.parse(localStorage.getItem('User'))
-  const [allPost, setAllPost] = useState(useSelector(state => state.post.posts));
+  const allPost = useSelector(state => state.post.posts)
   const [newComment, setNewComment] = useState("");
   const [myPosts, setMyPosts] = useState([]);
   const [deleted, setDeleted] = useState("");
-  const [userData, setUserData] = useState(useSelector(state=> state.user.userData));
+  // const userData = useSelector(state=> state.user.userData)
   const [allUser, setAllUser] = useState(useSelector(state => state.allUser.allUserData));
   const dispatch = useDispatch()
 
@@ -58,7 +59,7 @@ export default function Post() {
     if(!loading)
     {
       console.log("userDatainPosts")
-      const posts = allPost.filter((post) => {
+      const posts = allPost.length > 0 && allPost?.filter((post) => {
         return post.userId === userData.id;
       });
       setMyPosts(posts);
@@ -208,7 +209,7 @@ export default function Post() {
     }
   }, [allPost, userData]);
 
-  return myPosts.map((post) => (
+  return myPosts.length > 0 &&  myPosts.map((post) => (
     <div key={post.id} className="post">
       <Card
         variant="outlined"

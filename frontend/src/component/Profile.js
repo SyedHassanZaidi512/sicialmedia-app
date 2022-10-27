@@ -274,7 +274,7 @@ function Profile() {
       </Box>
       {posts ? (
         post === 0 ? (
-          <Post  />
+          <Post userData={userData} />
         ) : post === 1 ? (
           <Gallery userData={userData} />
         ) : (

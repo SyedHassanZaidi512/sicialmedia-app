@@ -3,8 +3,6 @@ import Navbar from "./Navbar";
 import Allposts from "./Allposts";
 import "./styles/Home.css";
 import { useSelector,useDispatch } from "react-redux";
-import { useEffect } from "react";
-
 
 function Home({userData}) {
    const dispatch = useDispatch()
@@ -13,10 +11,11 @@ function Home({userData}) {
   const token = localStorage.getItem('Token')
 
   console.log(token,"Data")
+  console.log(userData,"userKaData")
   return (
     <div className="home">
-      <Navbar  /> 
-       {token ? <Allposts /> : <h1>Please Login</h1>}
+      <Navbar userData={userData} /> 
+       {token ? <Allposts userData={userData} /> : <h1>Please Login</h1>}
     </div>
   );
 }

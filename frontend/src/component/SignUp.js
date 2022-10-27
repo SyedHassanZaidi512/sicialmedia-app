@@ -93,8 +93,7 @@ export default function SignUp() {
       notify();
     } else {
       localStorage.setItem("Token", res.data.token);
-      localStorage.setItem("User", res.data.user.id);
-      // dispatch(userCredentials(res.data)); //this is sending token with user data in redux
+      localStorage.setItem("User",  JSON.stringify(res.data.user));
       Navigate("/home");
     }
   };

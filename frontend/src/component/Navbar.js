@@ -10,12 +10,13 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import {  useSelector } from "react-redux";
+import { useEffect } from "react";
 import "../component/styles/Navbar.css";
 import { Link } from "react-router-dom";
 
 
 function Navbar({ userData }) {
-
+     
   const token = useSelector((state) => state.user.token);
   return (                       
     <div className="navbar">

@@ -16,8 +16,9 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import Avatar from "@mui/material/Avatar";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import Stack from "@mui/material/Stack";
+
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import "../component/styles/Navbar.css";
 import OtherUserProfile from "./OtherUserProfile";
 import { Link } from "react-router-dom";
@@ -67,8 +68,9 @@ function OtherUsers({ userData, getData }) {
   const [showDetails, setShowDetails] = useState(0);
   const [otherUserData, setOtherUserData] = useState([]);
   const token = useSelector((state) => state.user.token); //getting token from redux because
-
+  const dispatch = useDispatch()
   useEffect(() => {
+    dispatch()
     getAllUsersData();
   }, []);
 
