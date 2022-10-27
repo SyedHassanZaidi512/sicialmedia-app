@@ -20,7 +20,7 @@ function Profile() {
   const [posts, setPosts] = useState("");
   const [post, setPost] = useState(0);
   const [image, setImage] = useState("");
-  const user = JSON.parse(localStorage.getItem('User'))
+  const myId = JSON.parse(localStorage.getItem('User')).id
   const token = useSelector((state) => state.user.token); //getting token from redux because
   const dispatch = useDispatch();
   const userData = useSelector((state=> (state.user.userData)))
@@ -50,7 +50,7 @@ function Profile() {
   const UploadImage = async (event) => {   //Upload new  image
     console.log(event.target.files[0], "image");
     setImage(event.target.files[0]);
-    dispatch(getData(user.id))
+    dispatch(getData(myId))
     getData();
   };
 
@@ -63,7 +63,7 @@ function Profile() {
         const res = await client.put(`/editPic/${id}`, formdata);
         return res;
       }
-      dispatch(getData(user.id))
+      dispatch(getData(myId))
     } catch (error) {
       console.log(error, "error");
     }

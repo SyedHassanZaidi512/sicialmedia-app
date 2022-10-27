@@ -26,7 +26,7 @@ function Allposts() {
   const id = users.id
   const token = useSelector((state) => state.user.token); // getting token
   const posts = useSelector((state)=> state.post.posts);
-  const [checked, setChecked] = useState(null);
+  const [checked, setChecked] = useState(localStorage.getItem('checked'));
   const [allUser, setAllUser] = useState(useSelector((state)=> state.allUser.allUserData));
   const [followingPosts, setFollowingPosts] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -51,7 +51,7 @@ function Allposts() {
     if (userData) {
       setData();
     }
-  }, []);
+  }, [checked]);
 
   const getPostData = async () => { // to get all the posts getPosts
     dispatch(getPosts())
@@ -60,9 +60,14 @@ function Allposts() {
     // dispatch(getData(id))
     dispatch(getAllUser())
   };
-
+  const followings =userData.followings
   const setData = () => { //filetring followings posts in private mode
+    
+  console.log(followings,"mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+  
+    // console.log(followingIds,"....followingIds") 
     const MyFollowing = posts.length > 0 && posts.filter((post) => {   //  filter recommended 3 done
+
       return userData.followings
         .map((following) => following.followingId)
         .includes(post.userId);
@@ -156,11 +161,11 @@ function Allposts() {
     }
   };
  console.log(posts,"ps")
+ console.log(followingPosts,"followingPosts")
  if(posts && followingPosts)
  {  
-  return checked === 0 ? followingPosts : posts.map((post) => (
+  return checked == 0 ? followingPosts : posts.map((post) => (
     <div key={post.id} className="post">
-      {console.log(post,"...........")}
       <Card
         variant="outlined"
         sx={{
@@ -190,7 +195,7 @@ function Allposts() {
             {post.users.picture &&  <Avatar size="sm" src={ post.users.picture ?post.users.picture:"" } />}
           </Box>
            {post.users.name && <Typography fontWeight="lg">{post.users.name}</Typography>}
-           {console.log(post.users,"users")}
+    
           <IconButton
             variant="plain"
             color="neutral"
@@ -239,7 +244,7 @@ function Allposts() {
             fontWeight="lg"
             textColor="text.primary"
           ></Link>{" "}
-          {/* {post.description} */}
+
         </Typography>
         <Link
           component="button"
