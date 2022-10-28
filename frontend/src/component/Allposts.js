@@ -46,7 +46,7 @@ function Allposts() {
   const getPostData = async () => {// to get all the posts getPosts
     dispatch(getPosts());
     const followings = userData.followings;
-    const followingId = followings.map((user) => {
+    const followingId = followings && followings.length > 0 && followings.map((user) => {
       return user.followingId;
     });
     const myFollowing =

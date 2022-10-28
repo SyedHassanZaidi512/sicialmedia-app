@@ -19,21 +19,13 @@ import { getData} from "./redux/userSlice";
 
 function App() {
   const myData = JSON.parse(localStorage.getItem("User"));
-  console.log(myData,"myData")
   const dispatch = useDispatch();
+  
   useEffect(() => {
      myData && dispatch(getData(myData.id))
   }, [getData])
   
-  const token = useSelector((state) => state.user.token); //getting token from redux
- 
-  console.log(myData,"userData")
-
   const userData = useSelector((state)=> state.user.userData)
-    
-  console.log(userData,"dataofUserfromredux")
-
-
   return (
     <Router>
       <ToastContainer

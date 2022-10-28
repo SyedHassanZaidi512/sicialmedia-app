@@ -17,22 +17,29 @@ import { Link } from "react-router-dom";
 import { getAllUser } from "../redux/allUserSlice";
 
 
-function FollowerList({userData,myData}) { //states
+function FollowerList({userData}) { //states
   const token = useSelector((state) => state.user.token);
   const allUsers = useSelector((state) =>  (state.allUser.allUserData));
+  const [myFollowers,setMyFollowers] = useState([])
   const dispatch = useDispatch()
-  // const userData = useSelector((state) =>  (state.user.userData));
   console.log(token,"token")
   console.log(userData,"userData")
   useEffect(() => {
     dispatch(getAllUser())
+    setData()
     console.log(allUsers,"allUsers")
   }, []);
   
-
-  const Myfollower = allUsers?.filter((user) => {//filter indentation done and changes done 3
-    return userData.followers.map((follower) => follower.followerId).includes(user.id);
-  });
+  const setData = () =>  {
+    const followerId = userData.followers && userData.followers.map((user)=>{
+      return user.followerId
+    })
+    const myFollower = allUsers && allUsers.length> 0 && allUsers.filter((user) => {  //filter indentation done and changes done 3
+      return followerId.includes(user.id)
+    });
+    setMyFollowers(myFollower)
+  }
+  
   return (
     <div>
       <div className="navbar">
@@ -92,7 +99,7 @@ function FollowerList({userData,myData}) { //states
       </div>
 
       <div className="otherprofile">
-        {Myfollower?.map((user) => (
+        {myFollowers?.map((user) => (
           <Box
             sx={{
               marginTop: 0,

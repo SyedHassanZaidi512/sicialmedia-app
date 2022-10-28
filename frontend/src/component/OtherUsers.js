@@ -65,7 +65,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 function OtherUsers({userData,myData}) {
   const [search, setSearch] = useState("");
-  // const [users, setUsers] = useState([]);
   const users = useSelector(state => state.allUser.allUserData)
   const [showDetails, setShowDetails] = useState(0);
   const [otherUserData, setOtherUserData] = useState([]);
@@ -85,7 +84,6 @@ function OtherUsers({userData,myData}) {
       userData?.followings.filter((following) => {
         return following.followingId === id;
       }).length === 0;
-    console.log(result, "result");
     result === true
       ? FollowFunc(id)
       : result === false
@@ -201,13 +199,11 @@ function OtherUsers({userData,myData}) {
   };
 
   const handleClick = (id) => { //show user details
-    console.log(id, "userId");
     setShowDetails(1);
     const otherUser = users?.filter((user) => {
       return user.id === id;
     });
     setOtherUserData(otherUser);
-    console.log(otherUser);
   };
 
   return (

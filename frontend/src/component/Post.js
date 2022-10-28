@@ -19,49 +19,30 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./styles/Post.css";
-import Allposts from "./Allposts";
-
-
 
 export default function Post({userData}) {
   const user = JSON.parse(localStorage.getItem('User'))
   const allPost = useSelector(state => state.post.posts)
   const [newComment, setNewComment] = useState("");
   const [myPosts, setMyPosts] = useState([]);
-  const [deleted, setDeleted] = useState("");
-  // const userData = useSelector(state=> state.user.userData)
   const [allUser, setAllUser] = useState(useSelector(state => state.allUser.allUserData));
   const dispatch = useDispatch()
-
-  const loading = useSelector((state)=>state.user.loading)
-  console.log(loading,"scaj")
+  const token = localStorage.getItem('Token')
   useEffect(() => {
    dispatch(getAllUser())
    dispatch(getPosts())
    getMyData()
   }, [])
   
-  
- 
-  const token = useSelector((state) => state.user.token); //getting token from redux because
-
-  console.log(userData,"state")
-   console.log(allPost,"//allpost")
-
   const getMyData =  () => {   // to get all the posts getPosts
         dispatch(getData(user.id))
   };
 
   const setData = () => {     //filetring my posts
-    if(!loading)
-    {
-      console.log("userDatainPosts")
-      const posts = allPost.length > 0 && allPost?.filter((post) => {
+      const posts =allPost && allPost.length > 0 && allPost?.filter((post) => {
         return post.userId === userData.id;
       });
-      setMyPosts(posts);
-    }
-     
+      setMyPosts(posts); 
   };
 
   const addCommentFunc = async (postId, userId) => {   //add comment method
@@ -102,7 +83,6 @@ export default function Post({userData}) {
           },
         }
       );
-        setDeleted(1 + 1);
         dispatch(getAllUser())
         dispatch(getPosts())
         getMyData()
@@ -151,8 +131,8 @@ export default function Post({userData}) {
       getMyData()
   };
 
-  const addLike = async (
-    postId //add Like
+  const addLike = async (  //add Like
+    postId
   ) => {
      try {
       const userId = userData.id;
@@ -173,8 +153,8 @@ export default function Post({userData}) {
      }
   };
 
-  const removeLike = async (
-    postId //remove like
+  const removeLike = async (   //remove like
+    postId
   ) => {
     try {
       const userId = userData.id;

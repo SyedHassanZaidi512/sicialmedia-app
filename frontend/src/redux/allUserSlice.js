@@ -27,7 +27,6 @@ export const getAllUser = createAsyncThunk('/user', async (values, thunkAPI) => 
           Authorization: `Bearer ${token}`,
        },
     })
-    console.log(response,"responseAll")
     return response.data
   } catch (error) {
     console.log('this is the error: ', { error })

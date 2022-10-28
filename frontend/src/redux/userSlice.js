@@ -4,7 +4,6 @@ import axios from 'axios';
 const token =localStorage.getItem('Token')
 
 if(token && token !==  null ){
-    console.log("token exists")  
     const decoded = jwt_decode(token);
     const expiresIn = new Date(decoded.exp*10000);
     if(new Date() > expiresIn){
@@ -26,7 +25,6 @@ export const getData = createAsyncThunk('user/getUser', async (id,values, thunkA
           Authorization: `Bearer ${token}`,
        },
     })
-    console.log(response,"response")
     return response.data
   } catch (error) {
     console.log('this is the error: ', { error })

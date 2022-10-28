@@ -45,7 +45,6 @@ function CreatePost({ userData }) {
   ];
 
   const Navigate = useNavigate();
-  console.log(userData.id, "id");
   const handleSubmit = async (event) => {
     console.log("abcdef");
     event.preventDefault();

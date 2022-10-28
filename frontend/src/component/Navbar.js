@@ -11,12 +11,19 @@ import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import {  useSelector } from "react-redux";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import {getData} from "../redux/userSlice"
 import "../component/styles/Navbar.css";
 import { Link } from "react-router-dom";
 
 
 function Navbar({ userData }) {
-     
+  const myData = JSON.parse(localStorage.getItem('User')).id
+  const dispatch = useDispatch()
+  useEffect(() => {
+    myData && dispatch(getData(myData))
+  }, [myData])
+  
   const token = useSelector((state) => state.user.token);
   return (                       
     <div className="navbar">

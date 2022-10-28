@@ -7,7 +7,7 @@ const checkUserAuth = async (req, res, next) => {
   const { authorization } = req.headers;
 
   if (authorization && authorization.startsWith("Bearer")) {
-    try {  //this is middleware to verify
+    try {  //this is middleware to verify user
 
       token = authorization.split(" ")[1];
 

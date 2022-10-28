@@ -14,8 +14,7 @@ import { useEffect, useState } from "react";
 import "./styles/Profile.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
-// import { logOut } from "../redux/userSlice";
-
+import {getData} from "../redux/userSlice"
 function Profile() {
   const [posts, setPosts] = useState("");
   const [post, setPost] = useState(0);
@@ -37,6 +36,8 @@ function Profile() {
   useEffect(() => {
     getData();
   }, [image,userData]);
+
+
 
   const getData = async () => { 
     try {
@@ -76,8 +77,6 @@ function Profile() {
   const onLogout = () => {   //Logout func //
     localStorage.removeItem("Token");
   };
-
-  console.log(posts,"state")
 
   return (
     <div className="profile">
@@ -136,7 +135,7 @@ function Profile() {
               </Link>{" "}
               posts
             </Typography>
-            <Typography>
+            <Typography >
               <Link
                 to="/followerlist"
                 style={{

@@ -2,16 +2,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import jwt_decode from "jwt-decode";
 import axios from 'axios';
 const token =localStorage.getItem('Token')
-if(token && token !==  null ){
-    console.log("token exists")  
+if(token && token !==  null ){ 
     const decoded = jwt_decode(token);
     const expiresIn = new Date(decoded.exp*10000);
     if(new Date() > expiresIn){
       localStorage.removeItem('Token');
     }
-
 }
-
 
 
 const initialState = {
@@ -27,7 +24,6 @@ export const getPosts = createAsyncThunk('getPost', async (values, thunkAPI) => 
           Authorization: `Bearer ${token}`,
        },
     })
-    console.log(response,"responsePost")
     return response.data
   } catch (error) {
     console.log('this is the error: ', { error })

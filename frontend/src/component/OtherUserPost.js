@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { toast } from "react-toastify";
 import { useSelector,useDispatch } from "react-redux";
+import { getData } from "../redux/userSlice";
 import { useEffect, useState } from "react";
 import { getAllUser } from "../redux/allUserSlice";
 import {getPosts} from "../redux/postSlice"
@@ -26,31 +27,23 @@ function OtherUserPost({ userData, posts, currentUserData}) {
   const [myPosts, setMyPosts] =useState([]); 
   const allUser= useSelector(state => state.allUser.allUserData)
   const allPost = useSelector(state => state.post.posts)
+  const  id = JSON.parse(localStorage.getItem('User')).id
   const token = useSelector((state) => state.user.token); //getting token from redux because
   console.log(allPost,"allposts")
   const dispatch=useDispatch()
   useEffect(() => {
     dispatch(getAllUser())
     dispatch(getPosts())
+    dispatch(getData(id))
     setData()
   }, [])
   
   const getUserData =  () => {
-      
+    dispatch(getAllUser())
+    dispatch(getData(id))
   };
   const getPostData = async () => { // to get all the posts getPosts
     dispatch(getPosts())
-    // try {
-    //   const res = await axios.get("http://localhost:5001/post/all-post", {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   });
-    //   const posts = res.data;
-    //   setAllPost(posts);
-    // } catch (error) {
-    //   console.log(error, "error");
-    // }
   };
 
   const setData = () => { //filetring my posts
@@ -72,7 +65,6 @@ function OtherUserPost({ userData, posts, currentUserData}) {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-       //getAllUsersData();
       getPostData();
       getUserData();
       setData();
@@ -109,7 +101,6 @@ function OtherUserPost({ userData, posts, currentUserData}) {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-     //getAllUsersData();
     getUserData(); // get all users data
     getPostData();
     return res;
@@ -130,7 +121,6 @@ function OtherUserPost({ userData, posts, currentUserData}) {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-       //getAllUsersData();
       getUserData(); // get all users data
       getPostData();
       return res;
@@ -138,20 +128,16 @@ function OtherUserPost({ userData, posts, currentUserData}) {
       console.log("error", error);
     }
   };
-  // useEffect(() => {
-  //    //getAllUsersData();
-  //   getPostData();
-  //   getUserData();
-  // }, [token]);
-
-  // useEffect(() => {
-  //   if (userData) {
-  //     setData();
-  //   }
-  // }, [allPost, userData, addCommentFunc]);
+ 
+  useEffect(() => {
+    if (userData) {
+      setData();
+      getUserData();
+    }
+  }, [posts]);
 
   return posts ? (
-    myPosts.map((post) => (
+    myPosts && myPosts.length > 0 && myPosts.map((post) => (
       <div key={post.id} className="post">
         <Card
           variant="outlined"

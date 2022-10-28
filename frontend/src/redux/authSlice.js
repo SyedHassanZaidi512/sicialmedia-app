@@ -13,7 +13,6 @@ const user  = localStorage.getItem('User')
 }
 
  if(token && token !==  null ){
-  console.log("token exists")  
   const decoded = jwt_decode(token);
   const expiresIn = new Date(decoded.exp*10000);
   if(new Date() > expiresIn){
@@ -32,13 +31,11 @@ export const userSlice = createSlice({
         userCredentials:(state,action)=>{
             state.token=token
             state.users=user
-            console.log(action,".........action")
         },
         logOut:(state)=>
         {
             state.token=null
             state.users=null
-            console.log("now data is removed ")
         }
     }
 

@@ -27,8 +27,13 @@ function FollowingList({ userData, myData }) {
 
   useEffect(() => {
     getAllUserData();
+  
   }, []);
-
+  
+  useEffect(() => {
+    setData()
+  }, [userData])
+  
   const getAllUserData = async () => {  //get All users Data
     dispatch(getAllUser());
     dispatch(getData(myData.id))
@@ -36,11 +41,9 @@ function FollowingList({ userData, myData }) {
   };
 
   const setData = () => {
-    const MyFollowing = users.filter((user) => { //Filtering Followings Data from all data   //recommended 3  //done
-      console.log(userData.followings, "followings");
-      return userData.followings
-        .map((following) => following.followingId)
-        .includes(user.id);
+    const followingId = userData.followings.map((user)=>{return user.followingId})
+    const MyFollowing = users.filter((user) => { 
+      return   followingId.includes(user.id);
     });
     setMyFollowing(MyFollowing);
   };
@@ -64,15 +67,17 @@ function FollowingList({ userData, myData }) {
           },
         }
       );
+     
       if (user.data.statusCode === 422) {
         return toast.error(user.data.message);
       } else {
+        getAllUserData()
         return toast.success(`Un Followed`);
       }
     } catch (error) {
       console.log(error, "error");
     }
-    getAllUserData()
+ 
   };
 
   const setFollower = async (id) => {
@@ -96,7 +101,7 @@ function FollowingList({ userData, myData }) {
       console.log(err, "error");
     }
 
-    console.log(myFollowing, "myFollowing");
+
   };
   return (
     <div>
@@ -152,9 +157,9 @@ function FollowingList({ userData, myData }) {
           </AppBar>
         </Box>
       </div>
-      {console.log(myFollowing, "myFollowing")}
+    
       <div className="otherprofile">
-        {myFollowing.map((user) => (
+        {myFollowing && myFollowing.length > 0 && myFollowing.map((user) => (
           <Box
             sx={{
               marginTop: 0,
