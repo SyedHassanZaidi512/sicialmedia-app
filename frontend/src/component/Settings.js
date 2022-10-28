@@ -26,6 +26,7 @@ function Settings({ userData, getData }) {
 
   useEffect(() => {
      getData()
+     setChecked(JSON.parse(localStorage.getItem("checked")));
   }, [])
  
   const handleSubmit = async (event) => {
@@ -60,9 +61,9 @@ function Settings({ userData, getData }) {
   };
 
   const handleChange = () => {
-    const bool = checked == 0 ? 1 : 0;
+    const bool = checked === true ? false : true;
     localStorage.setItem("checked", bool);
-    setChecked(localStorage.getItem("checked"));
+    setChecked(JSON.parse(localStorage.getItem("checked")));
   };
   return (
     <>
@@ -151,7 +152,7 @@ function Settings({ userData, getData }) {
               >
                 <Box>See private posts</Box>
                 <Box>
-                  <Switch checked={checked == 0} onChange={handleChange} />
+                  <Switch checked={checked} onChange={handleChange} />
                 </Box>
               </Box>
             </Card>

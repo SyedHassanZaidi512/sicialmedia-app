@@ -47,10 +47,7 @@ export default function Post({userData}) {
 
   console.log(userData,"state")
    console.log(allPost,"//allpost")
-  const getUserData = async () => {            
-   
- 
-  };
+
   const getMyData =  () => {   // to get all the posts getPosts
         dispatch(getData(user.id))
   };
@@ -197,11 +194,6 @@ export default function Post({userData}) {
       console.log(error,"error")
     } 
   };
-  useEffect(() => {
-    dispatch(getAllUser())
-    dispatch(getPosts())
-    getMyData()
-  }, [token]);
 
   useEffect(() => {
     if (userData) {
@@ -209,7 +201,7 @@ export default function Post({userData}) {
     }
   }, [allPost, userData]);
 
-  return myPosts.length > 0 &&  myPosts.map((post) => (
+  return myPosts && myPosts.length > 0 &&  myPosts.map((post) => (
     <div key={post.id} className="post">
       <Card
         variant="outlined"

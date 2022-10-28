@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "./Navbar";
 import Allposts from "./Allposts";
 import "./styles/Home.css";
+// import {ErrorBoundary} from "react-error-boundary"
 import { useSelector,useDispatch } from "react-redux";
 
 function Home({userData}) {
