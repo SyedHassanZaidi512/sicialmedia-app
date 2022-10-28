@@ -155,9 +155,9 @@ function Allposts() {
     if (userData) {
       getPostData()
     }
-  }, [ userData]);
+  }, [userData]);
 
-  return ( publicPrivatePosts.map((post) => (
+  return ( publicPrivatePosts && publicPrivatePosts.length > 0 && publicPrivatePosts.map((post) => (
           <div key={post.id} className="post">
             <Card
               variant="outlined"
