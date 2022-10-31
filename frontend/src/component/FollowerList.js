@@ -22,12 +22,9 @@ function FollowerList({userData}) { //states
   const allUsers = useSelector((state) =>  (state.allUser.allUserData));
   const [myFollowers,setMyFollowers] = useState([])
   const dispatch = useDispatch()
-  console.log(token,"token")
-  console.log(userData,"userData")
   useEffect(() => {
     dispatch(getAllUser())
     setData()
-    console.log(allUsers,"allUsers")
   }, []);
   
   const setData = () =>  {

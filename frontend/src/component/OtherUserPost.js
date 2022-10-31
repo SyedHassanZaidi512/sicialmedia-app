@@ -29,7 +29,6 @@ function OtherUserPost({ userData, posts, currentUserData}) {
   const allPost = useSelector(state => state.post.posts)
   const  id = JSON.parse(localStorage.getItem('User')).id
   const token = useSelector((state) => state.user.token); //getting token from redux because
-  console.log(allPost,"allposts")
   const dispatch=useDispatch()
   useEffect(() => {
     dispatch(getAllUser())

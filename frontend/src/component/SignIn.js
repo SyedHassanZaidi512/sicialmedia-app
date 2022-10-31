@@ -66,6 +66,7 @@ export default function SignIn() {
         if (res.data.statusCode === 401) {
           setBoolError1(true);
           setHelperText1(res.data.message);
+          return res.data.message
         } else {
           setBoolError1(false);
           setHelperText1("");
@@ -73,23 +74,20 @@ export default function SignIn() {
         if (res.data.statusCode === 402) {
           setBoolError2(true);
           setHelperText2(res.data.message);
+          return res.data.message
         } else if (res.data.statusCode === 422 || !res) {
-          const notify = () => toast.error(res.data.message);
-          notify();
-        } else {
+           return toast.error(res.data.message);
+        } 
           if (token) {
             // dispatch(logOut());
             localStorage.removeItem("Token");
             localStorage.removeItem("User");
             localStorage.removeItem("checked");
-            localStorage.removeItem("userData");
-            console.log("previous token removed");
-          }
-          console.log(res.data,",,,,,,,data")
+           }
           localStorage.setItem("Token", res.data.token);
           localStorage.setItem("User",  JSON.stringify(res.data.user));
           Navigate("/home");
-        }
+        
       }
     } catch (error) {
       return error.message;

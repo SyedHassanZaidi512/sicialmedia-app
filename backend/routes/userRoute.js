@@ -33,7 +33,7 @@ router.post("/sign-up", async (req, res) => {  //Add user  /Sign Up
   }
   try {
     const userExist = await User.findOne({ where: { email } });
-    if (userExist) {
+    if (userExist ) {
       return res.json({
         statusCode: 422,
         message: "This Email Already Exists",
@@ -45,7 +45,7 @@ router.post("/sign-up", async (req, res) => {  //Add user  /Sign Up
           cloudinary.uploader.upload(file.tempFilePath, async (err, result) => {
             picture = req.files ? result.url : " ";
             const user = await User.create({ name, email, password:hash, picture });
-            const token = jwt.sign({ id: user.id }, "ytrujm");
+            const token = jwt.sign({ id: user.id }, "ytrujm",{expiresIn:"10 min"});
             res.json({ token, user: user });
             return res.status(201).json(user);
           });
@@ -80,14 +80,13 @@ router.post("/sign-in", async (req, res) => {    // sign in
   try {
     const userExist = await User.findOne({ 
       where: { email }
-    });
-    if(userExist)
+    }); 
+    if(userExist && userExist !== null )
     {
        bcrypt.compare(password, userExist.password, function(err, result) {
          if (result) 
          {
-             console.log(userExist.id,"id")
-             const token = jwt.sign({ id: userExist.id }, "ytrujm");
+          const token = jwt.sign({ id: userExist.id }, "ytrujm",{expiresIn:"10 min"});
              res.json({ token, user: userExist });
          } else {
            return res.json({ 
@@ -118,7 +117,6 @@ router.get("/", auth, async (req, res) => {  //get User
 });
 
 router.get("/getUser/:id", auth, async (req, res) => { //getspecific User
-  console.log("apihoy")
   const id = req.params.id;
   try {
     const user = await User.findOne({
@@ -152,7 +150,6 @@ router.put("/editPassword/:id", auth, async (req, res) => {  //edit password
   const id = req.params.id; 
   const { newPassword } = req.body;
   const { oldPassword } = req.body;
-  console.log(newPassword,oldPassword);
   const userExist= await User.findOne({
     where: { id }
   });
@@ -160,20 +157,15 @@ router.put("/editPassword/:id", auth, async (req, res) => {  //edit password
     return res.json({ statusCode: 422, message: "Please add new-password" });
   } else {
     try {
-      console.log("compare")
       bcrypt.compare(oldPassword, userExist.password, function(err, result) {
         if (result) 
         { 
-          console.log("matched")
           bcrypt.genSalt(10, (err, salt) => {
-            console.log("run")
             bcrypt.hash(newPassword, salt, async function (err, hash) {
-              console.log("adding")
               const user = await User.update(
                 { password: hash },
                 { where:  {id} }
               );
-              console.log(user,"response");
               if(user)
               {
                 return res.json({ statusCode: 201, message: "password changed successfully" })

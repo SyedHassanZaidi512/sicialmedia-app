@@ -89,8 +89,7 @@ export default function SignUp() {
       setLoading(false);
     }
     if (res.data.statusCode === 422) {
-      const notify = () => toast.error(res.data.message);
-      notify();
+      return toast.error(res.data.message);
     } else {
       localStorage.setItem("Token", res.data.token);
       localStorage.setItem("User",  JSON.stringify(res.data.user));
@@ -100,9 +99,6 @@ export default function SignUp() {
   const UploadImage = (event) => { //Image Uplaod
     setImage(event.target.files[0]);
   };
-  console.log(validate.helperText1);
-  console.log(validate.helperText2);
-  console.log(validate.helperText3);
   return (
     <div className="border1">
       <Landing />

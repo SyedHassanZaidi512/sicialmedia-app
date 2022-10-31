@@ -22,8 +22,7 @@ function Profile() {
   const myId = JSON.parse(localStorage.getItem('User')).id
   const token = useSelector((state) => state.user.token); //getting token from redux because
   const dispatch = useDispatch();
-  const userData = useSelector((state=> (state.user.userData)))
-  console.log(userData,"Data")
+  const userData = useSelector(state=> (state.user.userData))
   const client = axios.create({
     baseURL: "http://localhost:5001/user",
     headers: {
@@ -49,7 +48,6 @@ function Profile() {
   };
 
   const UploadImage = async (event) => {   //Upload new  image
-    console.log(event.target.files[0], "image");
     setImage(event.target.files[0]);
     dispatch(getData(myId))
     getData();

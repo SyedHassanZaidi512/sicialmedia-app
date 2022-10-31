@@ -46,7 +46,6 @@ function CreatePost({ userData }) {
 
   const Navigate = useNavigate();
   const handleSubmit = async (event) => {
-    console.log("abcdef");
     event.preventDefault();
     const formdata = new FormData();
     if (!title || !show || !image || !description) {
@@ -100,7 +99,6 @@ function CreatePost({ userData }) {
           const notify = () => toast.error(res.data.message);
           notify();
         } else {
-          console.log("done");
           Navigate("/profile");
         }
       } catch (err) {

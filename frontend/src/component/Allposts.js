@@ -45,18 +45,18 @@ function Allposts() {
 
   const getPostData = async () => {// to get all the posts getPosts
     dispatch(getPosts());
-    const followings = userData.followings;
-    const followingId = followings && followings.length > 0 && followings.map((user) => {
+    const followingId =userData.followings && userData.followings.length > 0 && userData.followings.map((user) => {
       return user.followingId;
     });
-    const myFollowing =
+      const myFollowing =
       posts &&
       posts.length > 0 &&
       posts.filter((post) => {
-        return followingId.includes(post.userId);
+        return followingId && followingId.length>0 && followingId.includes(post.userId);
       });
 
-    checked?setPublicPrivatePosts(myFollowing): setPublicPrivatePosts(posts)
+      checked?setPublicPrivatePosts(myFollowing): setPublicPrivatePosts(posts)
+    
   };
   const getUserData = () => {
     dispatch(getAllUser());

@@ -5,7 +5,7 @@ const token =localStorage.getItem('Token')
 
 if(token && token !==  null ){
     const decoded = jwt_decode(token);
-    const expiresIn = new Date(decoded.exp*10000);
+    const expiresIn = new Date(decoded.exp*1000);
     if(new Date() > expiresIn){
       localStorage.removeItem('Token');
     }
