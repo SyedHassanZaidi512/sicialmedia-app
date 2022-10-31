@@ -21,8 +21,8 @@ import axios from "axios";
 import "./styles/Post.css";
 
 
-function OtherUserPost({ userData, posts, currentUserData}) {
- 
+function OtherUserPost({ userData}) {
+  const currentUserData = useSelector(state => state.user.userData)
   const [newComment, setNewComment] = useState("");
   const [myPosts, setMyPosts] =useState([]); 
   const allUser= useSelector(state => state.allUser.allUserData)
@@ -30,6 +30,7 @@ function OtherUserPost({ userData, posts, currentUserData}) {
   const  id = JSON.parse(localStorage.getItem('User')).id
   const token = useSelector((state) => state.user.token); //getting token from redux because
   const dispatch=useDispatch()
+
   useEffect(() => {
     dispatch(getAllUser())
     dispatch(getPosts())
@@ -37,11 +38,15 @@ function OtherUserPost({ userData, posts, currentUserData}) {
     setData()
   }, [])
   
+  useEffect(() => {
+    setData()
+  }, [allPost])
+  
   const getUserData =  () => {
     dispatch(getAllUser())
     dispatch(getData(id))
   };
-  const getPostData = async () => { // to get all the posts getPosts
+  const getPostData = () => { // to get all the posts getPosts
     dispatch(getPosts())
   };
 
@@ -131,11 +136,10 @@ function OtherUserPost({ userData, posts, currentUserData}) {
   useEffect(() => {
     if (userData) {
       setData();
-      getUserData();
     }
-  }, [posts]);
+  }, [likeFunc,addCommentFunc]);
 
-  return posts ? (
+  return userData.posts ? (
     myPosts && myPosts.length > 0 && myPosts.map((post) => (
       <div key={post.id} className="post">
         <Card

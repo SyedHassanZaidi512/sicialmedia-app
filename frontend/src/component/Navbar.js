@@ -17,14 +17,15 @@ import "../component/styles/Navbar.css";
 import { Link } from "react-router-dom";
 
 
-function Navbar({ userData }) {
-  const myData = JSON.parse(localStorage.getItem('User')).id
+function Navbar({ userData}) {
+  const myData = JSON.parse(localStorage.getItem('User'))
+  
   const dispatch = useDispatch()
   useEffect(() => {
-    myData && dispatch(getData(myData))
-  }, [myData])
+    myData.id && dispatch(getData(myData.id))
+  }, [myData.id])
   
-  const token = useSelector((state) => state.user.token);
+  const token = localStorage.getItem('Token')
   return (                       
     <div className="navbar">
       <Box sx={{ flexGrow: 1 }}>

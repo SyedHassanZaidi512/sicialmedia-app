@@ -242,7 +242,8 @@ function OtherUserProfile({ otherUserData, currentUserData,getAllUsersData }) {
               }}
               onClick={handleFollow}
             >
-              {currentUserData.followings.filter((following) => {
+              {currentUserData.followings && currentUserData.followings.length >0 &&
+              currentUserData.followings.filter((following) => {
                 return following.followingId === userData.id;
               }).length === 0
                 ? "Follow"
@@ -297,7 +298,6 @@ function OtherUserProfile({ otherUserData, currentUserData,getAllUsersData }) {
       {posts ? (
         post === 0 ? (
           <OtherUserPost
-            posts={userData.posts}
             currentUserData={currentUserData}
             userData={userData}
           />

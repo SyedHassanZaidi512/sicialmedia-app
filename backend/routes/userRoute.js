@@ -3,9 +3,7 @@ const router = express.Router();
 const { User } = require("../models"); ///must do it dont forget
 const sequelize = require("sequelize");
 const jwt = require("jsonwebtoken");
-const { Op } = require("sequelize");
 const bcrypt = require("bcrypt")
-const path = require("path");
 const auth = require("../middleware/auth");
 
 
@@ -45,7 +43,7 @@ router.post("/sign-up", async (req, res) => {  //Add user  /Sign Up
           cloudinary.uploader.upload(file.tempFilePath, async (err, result) => {
             picture = req.files ? result.url : " ";
             const user = await User.create({ name, email, password:hash, picture });
-            const token = jwt.sign({ id: user.id }, "ytrujm",{expiresIn:"10 min"});
+            const token = jwt.sign({ id: user.id }, "ytrujm",{expiresIn:"2d"});
             res.json({ token, user: user });
             return res.status(201).json(user);
           });
@@ -86,7 +84,7 @@ router.post("/sign-in", async (req, res) => {    // sign in
        bcrypt.compare(password, userExist.password, function(err, result) {
          if (result) 
          {
-          const token = jwt.sign({ id: userExist.id }, "ytrujm",{expiresIn:"10 min"});
+          const token = jwt.sign({ id: userExist.id }, "ytrujm",{expiresIn:"2d"});
              res.json({ token, user: userExist });
          } else {
            return res.json({ 

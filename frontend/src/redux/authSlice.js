@@ -17,6 +17,7 @@ const user  = localStorage.getItem('User')
   const expiresIn = new Date(decoded.exp*1000);
   if(new Date() > expiresIn){
     localStorage.removeItem('Token');
+    localStorage.removeItem('checked')
   }else{
     initialState.token = token;
     const {user} = decoded
