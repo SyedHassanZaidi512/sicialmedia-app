@@ -152,10 +152,8 @@ function Allposts() {
 
 
   useEffect(() => {
-    if (userData) {
       getPostData()
-    }
-  }, [userData]);
+  }, [userData,setNewComment,allUser]);
 
   return ( publicPrivatePosts && publicPrivatePosts.length > 0 && publicPrivatePosts.map((post) => (
           <div key={post.id} className="post">
@@ -277,7 +275,7 @@ function Allposts() {
                         .map((user) => (
                           <Box>
                             {" "}
-                            <Avatar size="sm" src={user.picture} />
+                            <Avatar size="sm" src={user.picture? user.picture:""} />
                             <Typography key={post.id}>{user.name}</Typography>
                           </Box>
                         ))}
