@@ -33,12 +33,12 @@ Other User Profile
 
 
 
-
-Following List
+User can Delete his  Post comments etc
 
 ![Screenshot from 2022-11-11 12-44-17](https://user-images.githubusercontent.com/116274786/201297844-562a7af4-6437-4d66-8287-4742a49cc179.png)
 
-User can Delete his  Post comments etc
+Following List
+
 
 ![Screenshot from 2022-11-11 12-42-43](https://user-images.githubusercontent.com/116274786/201297629-7ff5e3e6-8577-46c9-b645-80cff8c7c04e.png)
 
